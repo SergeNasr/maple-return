@@ -30,10 +30,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Justfile with standard commands (lint, test, run) works
   3. Core data models for Property, Mortgage, CashFlow are defined
   4. Basic web server runs and serves a test page
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] TBD (planning phase not started)
+- [ ] 01-01-PLAN.md — Project infrastructure with uv, ruff, and pytest
+- [ ] 01-02-PLAN.md — Core data models (Property, Mortgage, CashFlow)
+- [ ] 01-03-PLAN.md — FastAPI web server with SQLite and test page
 
 ### Phase 2: Mortgage Engine
 **Goal**: Tool accurately calculates Canadian mortgage amortization across multiple terms
@@ -114,7 +116,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/? | Not started | - |
+| 1. Foundation | 0/3 | Ready to execute | - |
 | 2. Mortgage Engine | 0/? | Not started | - |
 | 3. Operating Model | 0/? | Not started | - |
 | 4. Analysis & Metrics | 0/? | Not started | - |
