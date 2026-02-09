@@ -12,7 +12,7 @@ This roadmap builds a rental property investment simulation tool from the ground
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - Project setup, tooling, data models
+- [x] **Phase 1: Foundation** - Project setup, tooling, data models ✓
 - [ ] **Phase 2: Mortgage Engine** - Canadian mortgage amortization with term renewals
 - [ ] **Phase 3: Operating Model** - Income, expenses, FX conversion
 - [ ] **Phase 4: Analysis & Metrics** - Financial calculations and detailed outputs
@@ -33,9 +33,9 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 3 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Project infrastructure with uv, ruff, and pytest
-- [ ] 01-02-PLAN.md — Core data models (Property, Mortgage, CashFlow)
-- [ ] 01-03-PLAN.md — FastAPI web server with SQLite and test page
+- [x] 01-01-PLAN.md — Project infrastructure with uv, ruff, and pytest
+- [x] 01-02-PLAN.md — Core data models (Property, Mortgage, CashFlow)
+- [x] 01-03-PLAN.md — FastAPI web server with SQLite and test page
 
 ### Phase 2: Mortgage Engine
 **Goal**: Tool accurately calculates Canadian mortgage amortization across multiple terms
@@ -116,7 +116,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/3 | Ready to execute | - |
+| 1. Foundation | 3/3 | ✓ Complete | 2026-02-08 |
 | 2. Mortgage Engine | 0/? | Not started | - |
 | 3. Operating Model | 0/? | Not started | - |
 | 4. Analysis & Metrics | 0/? | Not started | - |
@@ -125,4 +125,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 ---
 *Roadmap created: 2026-02-08*
-*Last updated: 2026-02-08*
+*Last updated: 2026-02-08 after Phase 1 completion*
