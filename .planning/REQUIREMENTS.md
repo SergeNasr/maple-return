@@ -80,35 +80,37 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| MORT-01 | TBD | Pending |
-| MORT-02 | TBD | Pending |
-| MORT-03 | TBD | Pending |
-| MORT-04 | TBD | Pending |
-| MORT-05 | TBD | Pending |
-| MORT-06 | TBD | Pending |
-| OPEX-01 | TBD | Pending |
-| OPEX-02 | TBD | Pending |
-| OPEX-03 | TBD | Pending |
-| OPEX-04 | TBD | Pending |
-| FX-01 | TBD | Pending |
-| FX-02 | TBD | Pending |
-| EXIT-01 | TBD | Pending |
-| EXIT-02 | TBD | Pending |
-| EXIT-03 | TBD | Pending |
-| EXIT-04 | TBD | Pending |
-| OUT-01 | TBD | Pending |
-| OUT-02 | TBD | Pending |
-| OUT-03 | TBD | Pending |
-| OUT-04 | TBD | Pending |
-| UI-01 | TBD | Pending |
-| UI-02 | TBD | Pending |
-| UI-03 | TBD | Pending |
+| MORT-01 | Phase 2 | Pending |
+| MORT-02 | Phase 2 | Pending |
+| MORT-03 | Phase 2 | Pending |
+| MORT-04 | Phase 2 | Pending |
+| MORT-05 | Phase 2 | Pending |
+| MORT-06 | Phase 2 | Pending |
+| OPEX-01 | Phase 3 | Pending |
+| OPEX-02 | Phase 3 | Pending |
+| OPEX-03 | Phase 3 | Pending |
+| OPEX-04 | Phase 3 | Pending |
+| FX-01 | Phase 3 | Pending |
+| FX-02 | Phase 3 | Pending |
+| EXIT-01 | Phase 5 | Pending |
+| EXIT-02 | Phase 5 | Pending |
+| EXIT-03 | Phase 5 | Pending |
+| EXIT-04 | Phase 5 | Pending |
+| OUT-01 | Phase 4 | Pending |
+| OUT-02 | Phase 4 | Pending |
+| OUT-03 | Phase 4 | Pending |
+| OUT-04 | Phase 4 | Pending |
+| UI-01 | Phase 6 | Pending |
+| UI-02 | Phase 6 | Pending |
+| UI-03 | Phase 6 | Pending |
 
 **Coverage:**
 - v1 requirements: 23 total
-- Mapped to phases: 0
-- Unmapped: 23 ⚠️
+- Mapped to phases: 23
+- Unmapped: 0
+
+**Note:** Phase 1 (Foundation) has no explicit requirements but provides infrastructure needed for all subsequent phases.
 
 ---
 *Requirements defined: 2026-02-08*
-*Last updated: 2026-02-08 after initial definition*
+*Last updated: 2026-02-08 after roadmap creation*
