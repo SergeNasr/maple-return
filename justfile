@@ -12,7 +12,7 @@ test:
 
 # Run FastAPI dev server
 run:
-	uv run uvicorn maple_return.main:app --reload --host 127.0.0.1 --port 8000
+	uv run uvicorn maple_return.main:app --reload --host 127.0.0.1 --port 8001
 
 # Install/sync dependencies
 install:
