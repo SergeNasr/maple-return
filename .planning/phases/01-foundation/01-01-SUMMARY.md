@@ -70,7 +70,7 @@ Each task was committed atomically:
 2. **Task 2: Create Justfile with standard commands** - `d4377f1` (chore)
 3. **Task 3: Configure pytest and ruff** - `4052636` (chore)
 
-**Plan metadata:** (pending final commit)
+**Plan metadata:** `1318e5c` (docs: complete plan)
 
 ## Files Created/Modified
 - `pyproject.toml` - Project metadata, dependencies, and ruff/pytest configuration
