@@ -1,0 +1,20 @@
+[project]
+name = "maple-return"
+version = "0.1.0"
+description = "Canadian rental property investment analyzer and scenario planner"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "jinja2",
+    "aiosqlite",
+    "python-multipart",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+    "ruff",
+    "httpx",
+]
