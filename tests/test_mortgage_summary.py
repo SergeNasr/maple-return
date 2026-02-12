@@ -1,22 +1,17 @@
 """Tests for annual summary and scenario comparison functionality."""
 
-import pytest
 from datetime import date
 from decimal import Decimal
 
 from maple_return.mortgage import (
     AmortizationEntry,
-    ScenarioResult,
-    TermSummary,
-    TermDefinition,
     MortgageInput,
+    TermDefinition,
     calculate_multi_term,
 )
 from maple_return.mortgage_summary import (
-    AnnualSummary,
-    ScenarioComparison,
-    generate_annual_summaries,
     compare_scenarios,
+    generate_annual_summaries,
 )
 
 
@@ -165,7 +160,6 @@ class TestAnnualSummary:
         summaries = generate_annual_summaries(scenario.schedule, input_data.purchase_price)
 
         # Sum annual totals
-        total_principal = sum(s.total_principal_paid for s in summaries)
         total_interest = sum(s.total_interest_paid for s in summaries)
         total_payments = sum(s.total_payments for s in summaries)
 
@@ -213,12 +207,13 @@ class TestScenarioComparison:
     def test_compare_two_scenarios_different_total_interest(self):
         """Scenario comparison with 2 scenarios shows different total interest values."""
         # Create 2 scenarios with different rates
+        # Use 10 years and lower payment to ensure mortgage extends to term 2
         input_data = MortgageInput(
             purchase_price=Decimal("400000.00"),
             down_payment=Decimal("80000.00"),
             annual_rate=Decimal("0.05"),
-            monthly_payment=Decimal("2000.00"),
-            amortization_years=5,
+            monthly_payment=Decimal("2800.00"),  # Lower than standard to extend to term 2
+            amortization_years=10,
             start_date=date(2025, 1, 1),
             rate_type="fixed",
             renewal_scenarios=[
@@ -245,8 +240,8 @@ class TestScenarioComparison:
             purchase_price=Decimal("400000.00"),
             down_payment=Decimal("80000.00"),
             annual_rate=Decimal("0.05"),
-            monthly_payment=Decimal("2000.00"),
-            amortization_years=5,
+            monthly_payment=Decimal("2800.00"),  # Lower than standard to extend to term 2
+            amortization_years=10,
             start_date=date(2025, 1, 1),
             rate_type="fixed",
             renewal_scenarios=[
@@ -297,8 +292,8 @@ class TestScenarioComparison:
             purchase_price=Decimal("400000.00"),
             down_payment=Decimal("80000.00"),
             annual_rate=Decimal("0.05"),  # Initial rate (term 1)
-            monthly_payment=Decimal("2000.00"),
-            amortization_years=10,
+            monthly_payment=Decimal("1800.00"),  # Low payment to extend to term 3
+            amortization_years=15,  # 15 years to get 3 terms
             start_date=date(2025, 1, 1),
             rate_type="fixed",
             renewal_scenarios=[
