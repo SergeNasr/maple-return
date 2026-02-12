@@ -9,12 +9,12 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Property & Mortgage
 
-- [ ] **MORT-01**: User can input purchase date, purchase price, and down payment
-- [ ] **MORT-02**: User can input mortgage rate (variable), payment amount (fixed), and 30-year amortization period
-- [ ] **MORT-03**: Tool generates full amortization schedule with monthly principal/interest split
+- [x] **MORT-01**: User can input purchase date, purchase price, and down payment
+- [x] **MORT-02**: User can input mortgage rate (variable), payment amount (fixed), and 30-year amortization period
+- [x] **MORT-03**: Tool generates full amortization schedule with monthly principal/interest split
 - [ ] **MORT-04**: ~~User can model rate changes within a term~~ — Deferred: user decided single rate per term during Phase 2 context gathering. Rate changes happen at 5-year renewal boundaries (MORT-05).
-- [ ] **MORT-05**: User can define 5-year term renewal scenarios (switch variable↔fixed, set new rate)
-- [ ] **MORT-06**: Tool projects mortgage across multiple term renewals through full amortization
+- [x] **MORT-05**: User can define 5-year term renewal scenarios (switch variable↔fixed, set new rate)
+- [x] **MORT-06**: Tool projects mortgage across multiple term renewals through full amortization
 
 ### Income & Expenses
 
@@ -80,12 +80,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| MORT-01 | Phase 2 | Pending |
-| MORT-02 | Phase 2 | Pending |
-| MORT-03 | Phase 2 | Pending |
+| MORT-01 | Phase 2 | ✓ Complete |
+| MORT-02 | Phase 2 | ✓ Complete |
+| MORT-03 | Phase 2 | ✓ Complete |
 | MORT-04 | Deferred | Deferred (single rate per term decided) |
-| MORT-05 | Phase 2 | Pending |
-| MORT-06 | Phase 2 | Pending |
+| MORT-05 | Phase 2 | ✓ Complete |
+| MORT-06 | Phase 2 | ✓ Complete |
 | OPEX-01 | Phase 3 | Pending |
 | OPEX-02 | Phase 3 | Pending |
 | OPEX-03 | Phase 3 | Pending |
@@ -114,4 +114,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-02-08*
-*Last updated: 2026-02-08 after roadmap creation*
+*Last updated: 2026-02-12 after Phase 2 completion*
