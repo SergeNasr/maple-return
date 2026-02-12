@@ -47,10 +47,12 @@ Plans:
   3. Rate changes within a term correctly adjust interest/principal split while payment stays fixed
   4. 5-year term renewals with rate/type changes (variable/fixed) work across full 30-year amortization
   5. Remaining balance at end of each term is correct
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] TBD (planning phase not started)
+- [ ] 02-01-PLAN.md — Core Canadian mortgage amortization engine (TDD)
+- [ ] 02-02-PLAN.md — Multi-term renewal and scenario comparison (TDD)
+- [ ] 02-03-PLAN.md — Annual summaries and scenario comparison output (TDD)
 
 ### Phase 3: Operating Model
 **Goal**: Tool models rental income, operating expenses, and currency conversion
@@ -117,7 +119,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | ✓ Complete | 2026-02-08 |
-| 2. Mortgage Engine | 0/? | Not started | - |
+| 2. Mortgage Engine | 0/3 | Planned | - |
 | 3. Operating Model | 0/? | Not started | - |
 | 4. Analysis & Metrics | 0/? | Not started | - |
 | 5. Exit Strategy | 0/? | Not started | - |
@@ -125,4 +127,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 ---
 *Roadmap created: 2026-02-08*
-*Last updated: 2026-02-08 after Phase 1 completion*
+*Last updated: 2026-02-11 after Phase 2 planning*
