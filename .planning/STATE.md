@@ -10,29 +10,29 @@ See: .planning/PROJECT.md (updated 2026-02-08)
 ## Current Position
 
 Phase: 2 of 6 (Mortgage Engine)
-Plan: 1 of 3 in current phase
+Plan: 2 of 3 in current phase
 Status: In progress
-Last activity: 2026-02-12 — Completed plan 02-01 (Core Canadian Mortgage Amortization Engine)
+Last activity: 2026-02-12 — Completed plan 02-02 (Multi-Term Renewal and Scenario Comparison)
 
-Progress: [███░░░░░░░] 33% (1/3 plans in phase 02)
+Progress: [██████░░░░] 67% (2/3 plans in phase 02)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: 8.6 min
-- Total execution time: 0.57 hours
+- Total plans completed: 5
+- Average duration: 7.6 min
+- Total execution time: 0.63 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-foundation | 3 | 29.2 min | 9.7 min |
-| 02-mortgage-engine | 1 | 5.0 min | 5.0 min |
+| 02-mortgage-engine | 2 | 9.0 min | 4.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (2min), 01-02 (3.5min), 01-03 (23.7min), 02-01 (5.0min)
-- Trend: TDD approach faster than manual integration work
+- Last 5 plans: 01-02 (3.5min), 01-03 (23.7min), 02-01 (5.0min), 02-02 (4.0min)
+- Trend: TDD approach consistently fast, mortgage engine plans very efficient
 
 *Updated after each plan completion*
 
@@ -73,6 +73,12 @@ Recent decisions affecting current work:
 - Preserve original day-of-month across payment dates (handle month-end edge cases)
 - Force final payoff at amortization_months if payment > interest (handles rounding accumulation)
 
+**From plan 02-02:**
+- Empty renewal_scenarios means single-term only (no automatic continuation with initial rate)
+- Payment recalculation at renewals spreads remaining balance over remaining amortization
+- Last renewal rate repeats for all subsequent terms when scenario list is shorter than needed
+- Terms truncate at 60 months unless mortgage pays off earlier within the term
+
 ### Pending Todos
 
 None yet.
@@ -84,5 +90,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-12
-Stopped at: Completed 02-01-PLAN.md (Core Canadian Mortgage Amortization Engine)
-Resume file: .planning/phases/02-mortgage-engine/02-01-SUMMARY.md
+Stopped at: Completed 02-02-PLAN.md (Multi-Term Renewal and Scenario Comparison)
+Resume file: .planning/phases/02-mortgage-engine/02-02-SUMMARY.md
