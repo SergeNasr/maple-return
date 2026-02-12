@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-02-08)
 ## Current Position
 
 Phase: 2 of 6 (Mortgage Engine)
-Plan: 2 of 3 in current phase
-Status: In progress
-Last activity: 2026-02-12 — Completed plan 02-02 (Multi-Term Renewal and Scenario Comparison)
+Plan: 3 of 3 in current phase
+Status: Complete
+Last activity: 2026-02-12 — Completed plan 02-03 (Annual Summaries and Scenario Comparison)
 
-Progress: [██████░░░░] 67% (2/3 plans in phase 02)
+Progress: [██████████] 100% (3/3 plans in phase 02)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: 7.6 min
-- Total execution time: 0.63 hours
+- Total plans completed: 6
+- Average duration: 6.7 min
+- Total execution time: 0.67 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-foundation | 3 | 29.2 min | 9.7 min |
-| 02-mortgage-engine | 2 | 9.0 min | 4.5 min |
+| 02-mortgage-engine | 3 | 12.0 min | 4.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-02 (3.5min), 01-03 (23.7min), 02-01 (5.0min), 02-02 (4.0min)
+- Last 5 plans: 01-03 (23.7min), 02-01 (5.0min), 02-02 (4.0min), 02-03 (3.0min)
 - Trend: TDD approach consistently fast, mortgage engine plans very efficient
 
 *Updated after each plan completion*
@@ -79,6 +79,12 @@ Recent decisions affecting current work:
 - Last renewal rate repeats for all subsequent terms when scenario list is shorter than needed
 - Terms truncate at 60 months unless mortgage pays off earlier within the term
 
+**From plan 02-03:**
+- Annual summaries group by calendar year (not mortgage year)
+- Partial first/last years include all months that fall in that calendar year
+- Equity calculated as purchase_price minus remaining balance at each summary level
+- Renewal rates list excludes initial term (term 1) since it's the same across all scenarios
+
 ### Pending Todos
 
 None yet.
@@ -90,5 +96,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-12
-Stopped at: Completed 02-02-PLAN.md (Multi-Term Renewal and Scenario Comparison)
-Resume file: .planning/phases/02-mortgage-engine/02-02-SUMMARY.md
+Stopped at: Completed 02-03-PLAN.md (Annual Summaries and Scenario Comparison)
+Resume file: .planning/phases/02-mortgage-engine/02-03-SUMMARY.md
