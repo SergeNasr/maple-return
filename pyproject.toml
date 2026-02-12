@@ -10,6 +10,7 @@ dependencies = [
     "sqlalchemy[asyncio]",
     "aiosqlite",
     "python-multipart",
+    "python-dateutil",
 ]
 
 [project.optional-dependencies]

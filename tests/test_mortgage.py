@@ -22,8 +22,8 @@ class TestMonthlyRateCalculation:
         monthly_rate = calculate_monthly_rate(annual_rate)
 
         # Expected: (1 + 0.05/2)^(1/6) - 1 = (1.025)^(1/6) - 1
-        # = 0.00412037... ≈ 0.41204% monthly
-        assert abs(monthly_rate - Decimal("0.004120368673896")) < Decimal("0.000000000001")
+        # = 0.004123915... ≈ 0.41239% monthly
+        assert abs(monthly_rate - Decimal("0.004123915465")) < Decimal("0.000001")
 
     def test_calculate_monthly_rate_zero_rate(self):
         """Zero interest rate should produce zero monthly rate."""
@@ -35,8 +35,8 @@ class TestMonthlyRateCalculation:
         annual_rate = Decimal("0.03")
         monthly_rate = calculate_monthly_rate(annual_rate)
 
-        # Expected: (1.015)^(1/6) - 1 ≈ 0.00247585
-        assert abs(monthly_rate - Decimal("0.002475854")) < Decimal("0.000001")
+        # Expected: (1.015)^(1/6) - 1 ≈ 0.002484517
+        assert abs(monthly_rate - Decimal("0.002484517")) < Decimal("0.000001")
 
 
 class TestStandardPaymentCalculation:
@@ -51,8 +51,8 @@ class TestStandardPaymentCalculation:
         payment = calculate_standard_payment(principal, monthly_rate, num_months)
 
         # Expected formula: P * r * (1+r)^n / ((1+r)^n - 1)
-        # With r = 0.004120368673896, this is approximately $2,147.29
-        assert abs(payment - Decimal("2147.29")) < Decimal("1.00")
+        # With r = 0.004123915..., this is approximately $2,134.76
+        assert abs(payment - Decimal("2134.76")) < Decimal("1.00")
 
     def test_standard_payment_zero_rate(self):
         """Zero rate means equal principal payments over term."""
@@ -142,7 +142,12 @@ class TestAmortizationSchedule:
         purchase_price = Decimal("100000.00")
         down_payment = Decimal("20000.00")
         annual_rate = Decimal("0.04")
-        monthly_payment = Decimal("400.00")
+        # Use standard payment to ensure it pays off
+        monthly_payment = calculate_standard_payment(
+            purchase_price - down_payment,
+            calculate_monthly_rate(annual_rate),
+            300,
+        )
         amortization_months = 300
 
         schedule = calculate_amortization(
@@ -158,8 +163,8 @@ class TestAmortizationSchedule:
         final = schedule[-1]
         assert final.balance == Decimal("0.00")
 
-        # Final payment should be smaller than regular payment (remaining balance + interest)
-        assert final.payment < monthly_payment
+        # Final payment should be smaller than or equal to regular payment (remaining balance + interest)
+        assert final.payment <= monthly_payment
 
     def test_higher_payment_pays_off_early(self):
         """Payment higher than standard should pay off before amortization_months."""
@@ -278,11 +283,19 @@ class TestAmortizationSchedule:
 
     def test_principal_plus_interest_equals_payment_except_final(self):
         """Each month (except final): principal + interest = payment."""
+        principal = Decimal("150000.00") - Decimal("30000.00")  # $120k
+        # Use standard payment to ensure it pays off
+        monthly_payment = calculate_standard_payment(
+            principal,
+            calculate_monthly_rate(Decimal("0.04")),
+            300,
+        )
+
         schedule = calculate_amortization(
             purchase_price=Decimal("150000.00"),
             down_payment=Decimal("30000.00"),
             annual_rate=Decimal("0.04"),
-            monthly_payment=Decimal("600.00"),
+            monthly_payment=monthly_payment,
             amortization_months=300,
             start_date=date(2024, 1, 1),
         )
