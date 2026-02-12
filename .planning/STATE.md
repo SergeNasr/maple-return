@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-08)
 
 **Core value:** The owner can clearly see how their Canadian rental property investment is performing and project where it's headed under different scenarios, so they can make informed hold/sell/refinance decisions.
-**Current focus:** Phase 2 - Mortgage Engine
+**Current focus:** Phase 3 - Operating Model
 
 ## Current Position
 
-Phase: 2 of 6 (Mortgage Engine)
-Plan: 3 of 3 in current phase
-Status: Complete
-Last activity: 2026-02-12 — Completed plan 02-03 (Annual Summaries and Scenario Comparison)
+Phase: 3 of 6 (Operating Model)
+Plan: 1 of 2 in current phase
+Status: In Progress
+Last activity: 2026-02-12 — Completed plan 03-01 (Operating Income and Expense Engine)
 
-Progress: [██████████] 100% (3/3 plans in phase 02)
+Progress: [█████░░░░░] 50% (1/2 plans in phase 03)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
-- Average duration: 6.7 min
-- Total execution time: 0.67 hours
+- Total plans completed: 7
+- Average duration: 6.3 min
+- Total execution time: 0.73 hours
 
 **By Phase:**
 
@@ -29,10 +29,11 @@ Progress: [██████████] 100% (3/3 plans in phase 02)
 |-------|-------|-------|----------|
 | 01-foundation | 3 | 29.2 min | 9.7 min |
 | 02-mortgage-engine | 3 | 12.0 min | 4.0 min |
+| 03-operating-model | 1 | 2.8 min | 2.8 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-03 (23.7min), 02-01 (5.0min), 02-02 (4.0min), 02-03 (3.0min)
-- Trend: TDD approach consistently fast, mortgage engine plans very efficient
+- Last 5 plans: 02-01 (5.0min), 02-02 (4.0min), 02-03 (3.0min), 03-01 (2.8min)
+- Trend: Consistent efficiency with TDD approach, operating model plan very fast
 
 *Updated after each plan completion*
 
@@ -85,6 +86,11 @@ Recent decisions affecting current work:
 - Equity calculated as purchase_price minus remaining balance at each summary level
 - Renewal rates list excludes initial term (term 1) since it's the same across all scenarios
 
+**From plan 03-01:**
+- Use lease anniversary for both rent and expense escalation timing (not calendar year)
+- Management fee calculated as % of gross rent (not effective rent after vacancy)
+- Compounding escalation formula: base * (1 + rate)^years (not simple interest)
+
 ### Pending Todos
 
 None yet.
@@ -96,5 +102,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-12
-Stopped at: Completed 02-03-PLAN.md (Annual Summaries and Scenario Comparison)
-Resume file: .planning/phases/02-mortgage-engine/02-03-SUMMARY.md
+Stopped at: Completed 03-01-PLAN.md (Operating Income and Expense Engine)
+Resume file: .planning/phases/03-operating-model/03-01-SUMMARY.md
