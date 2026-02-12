@@ -2,6 +2,9 @@
 
 Implements Canadian semi-annual compounding convention and generates
 full monthly amortization schedules for mortgage loans.
+
+Supports multi-term mortgages with rate renewals every 5 years (standard Canadian
+mortgage structure) and scenario comparison across different renewal rate assumptions.
 """
 
 import calendar
@@ -52,6 +55,72 @@ class AmortizationEntry:
     principal: Decimal  # Principal portion (reduces balance)
     interest: Decimal  # Interest portion
     balance: Decimal  # Remaining balance after payment
+
+
+@dataclass
+class TermDefinition:
+    """Interest rate definition for a single mortgage term.
+
+    Defines the rate parameters for one 5-year term in a multi-term mortgage.
+    Used in renewal scenarios to specify different rate assumptions.
+    """
+
+    rate: Decimal  # Nominal annual rate for this term
+    rate_type: str  # "variable" or "fixed" (metadata, doesn't affect calculation)
+
+
+@dataclass
+class MortgageInput:
+    """Complete input specification for multi-term mortgage calculation.
+
+    Captures initial mortgage parameters and renewal rate scenarios for
+    comparing different rate assumptions over the full amortization period.
+    """
+
+    purchase_price: Decimal
+    down_payment: Decimal
+    annual_rate: Decimal  # Initial term rate
+    monthly_payment: Decimal  # Initial term payment (user-specified)
+    amortization_years: int  # Total amortization (e.g., 30)
+    start_date: date  # First payment date
+    rate_type: str  # Initial term: "variable" or "fixed"
+    renewal_scenarios: list[list[TermDefinition]]  # 1-3 lists of renewal terms
+
+
+@dataclass
+class TermSummary:
+    """Summary statistics for a single 5-year mortgage term.
+
+    Aggregates payment details and balance changes for one term within
+    a multi-term mortgage structure.
+    """
+
+    term_number: int
+    rate: Decimal
+    rate_type: str
+    monthly_payment: Decimal
+    start_balance: Decimal
+    end_balance: Decimal
+    total_principal: Decimal
+    total_interest: Decimal
+    months: int
+
+
+@dataclass
+class ScenarioResult:
+    """Complete results for one renewal rate scenario.
+
+    Contains the full amortization schedule, per-term summaries, and
+    aggregate totals for a specific set of renewal rate assumptions.
+    """
+
+    scenario_index: int  # 0-based
+    schedule: list[AmortizationEntry]  # Full monthly schedule
+    terms: list[TermSummary]  # Per-term summary
+    total_interest: Decimal  # Grand total interest paid
+    total_payments: Decimal  # Grand total of all payments
+    final_balance: Decimal  # Balance at end (should be 0)
+    months_to_payoff: int  # Total months
 
 
 def calculate_monthly_rate(annual_rate: Decimal) -> Decimal:
@@ -192,3 +261,163 @@ def calculate_amortization(
         current_date = _add_months(start_date, month_num, original_day)
 
     return schedule
+
+
+def calculate_multi_term(input_data: MortgageInput) -> list[ScenarioResult]:
+    """Calculate multi-term mortgage with renewal rate scenarios.
+
+    Chains single-term calculations across 5-year renewal boundaries, recalculating
+    payments at each renewal based on remaining balance, new rate, and remaining
+    amortization. Supports 1-3 different renewal rate scenarios for comparison.
+
+    Each term is exactly 5 years (60 months). At each renewal:
+    1. Take remaining balance from end of previous term
+    2. Calculate remaining amortization months
+    3. Apply new renewal rate
+    4. Recalculate payment using calculate_standard_payment()
+    5. Generate next term's schedule using calculate_amortization()
+
+    If renewal_scenarios list is shorter than needed, the last rate repeats for
+    all subsequent terms.
+
+    Args:
+        input_data: Complete mortgage input including initial parameters and
+                   renewal rate scenarios
+
+    Returns:
+        List of ScenarioResult objects, one per renewal scenario (1-3 scenarios)
+    """
+    total_amortization_months = input_data.amortization_years * 12
+    initial_principal = input_data.purchase_price - input_data.down_payment
+
+    # If no renewal scenarios provided, still need to process at least one scenario
+    # but we'll only run the initial term (no renewals)
+    scenarios_to_process = input_data.renewal_scenarios
+    has_renewals = bool(scenarios_to_process)
+    if not scenarios_to_process:
+        scenarios_to_process = [[]]  # Single empty scenario (no renewals, just initial term)
+
+    results = []
+
+    for scenario_idx, renewal_rates in enumerate(scenarios_to_process):
+        full_schedule: list[AmortizationEntry] = []
+        term_summaries: list[TermSummary] = []
+
+        current_balance = initial_principal
+        current_date = input_data.start_date
+        original_day = input_data.start_date.day
+        months_elapsed = 0
+        term_number = 1
+
+        # Initial term uses user-specified payment and rate
+        current_rate = input_data.annual_rate
+        current_rate_type = input_data.rate_type
+        current_payment = input_data.monthly_payment
+
+        while months_elapsed < total_amortization_months and current_balance > Decimal("0.00"):
+            # Determine how many months remaining in full amortization
+            remaining_amortization = total_amortization_months - months_elapsed
+
+            # Generate schedule for full remaining amortization
+            # We'll truncate to 60 months (5-year term) unless it pays off sooner
+            term_schedule = calculate_amortization(
+                purchase_price=current_balance,
+                down_payment=Decimal("0"),  # Already accounted for
+                annual_rate=current_rate,
+                monthly_payment=current_payment,
+                amortization_months=remaining_amortization,
+                start_date=current_date,
+            )
+
+            # Truncate to 60 months max (5-year term) unless it paid off earlier
+            term_months = min(60, len(term_schedule))
+            term_schedule = term_schedule[:term_months]
+
+            # Adjust month numbers to be continuous
+            month_offset = months_elapsed
+            for entry in term_schedule:
+                entry.month_number += month_offset
+
+            # Calculate term summary
+            start_balance = current_balance
+            end_balance = term_schedule[-1].balance
+            total_principal = sum(entry.principal for entry in term_schedule)
+            total_interest = sum(entry.interest for entry in term_schedule)
+            actual_months = len(term_schedule)
+
+            term_summary = TermSummary(
+                term_number=term_number,
+                rate=current_rate,
+                rate_type=current_rate_type,
+                monthly_payment=current_payment,
+                start_balance=start_balance,
+                end_balance=end_balance,
+                total_principal=total_principal,
+                total_interest=total_interest,
+                months=actual_months,
+            )
+            term_summaries.append(term_summary)
+
+            # Append term schedule to full schedule
+            full_schedule.extend(term_schedule)
+
+            # Update state for next term
+            months_elapsed += actual_months
+            current_balance = end_balance
+
+            # Check if we're done (balance paid off)
+            if current_balance == Decimal("0.00"):
+                break
+
+            # If no renewals were specified, stop after first term
+            if not has_renewals:
+                break
+
+            # Prepare for next term (renewal)
+            term_number += 1
+
+            # Get next rate from scenario (or repeat last rate if list is shorter)
+            renewal_index = term_number - 2  # -1 for 0-based, -1 because term 1 used initial rate
+            if renewal_index < len(renewal_rates):
+                next_term = renewal_rates[renewal_index]
+                current_rate = next_term.rate
+                current_rate_type = next_term.rate_type
+            elif renewal_rates:
+                # Repeat last rate
+                last_term = renewal_rates[-1]
+                current_rate = last_term.rate
+                current_rate_type = last_term.rate_type
+            else:
+                # No renewal rates specified, keep using initial rate
+                current_rate = input_data.annual_rate
+                current_rate_type = input_data.rate_type
+
+            # Recalculate payment for next term
+            remaining_months = total_amortization_months - months_elapsed
+            monthly_rate = calculate_monthly_rate(current_rate)
+            current_payment = calculate_standard_payment(
+                current_balance, monthly_rate, remaining_months
+            )
+
+            # Update current_date for next term
+            current_date = full_schedule[-1].date
+            current_date = _add_months(current_date, 1, original_day)
+
+        # Calculate scenario totals
+        total_interest = sum(entry.interest for entry in full_schedule)
+        total_payments = sum(entry.payment for entry in full_schedule)
+        final_balance = full_schedule[-1].balance if full_schedule else current_balance
+        months_to_payoff = len(full_schedule)
+
+        scenario_result = ScenarioResult(
+            scenario_index=scenario_idx,
+            schedule=full_schedule,
+            terms=term_summaries,
+            total_interest=total_interest,
+            total_payments=total_payments,
+            final_balance=final_balance,
+            months_to_payoff=months_to_payoff,
+        )
+        results.append(scenario_result)
+
+    return results

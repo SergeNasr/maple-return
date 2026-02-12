@@ -3,10 +3,7 @@
 from datetime import date
 from decimal import Decimal
 
-import pytest
-
 from maple_return.mortgage import (
-    AmortizationEntry,
     calculate_amortization,
     calculate_monthly_rate,
     calculate_standard_payment,
@@ -163,7 +160,8 @@ class TestAmortizationSchedule:
         final = schedule[-1]
         assert final.balance == Decimal("0.00")
 
-        # Final payment should be smaller than or equal to regular payment (remaining balance + interest)
+        # Final payment should be smaller or equal to regular payment
+        # (remaining balance + interest)
         assert final.payment <= monthly_payment
 
     def test_higher_payment_pays_off_early(self):

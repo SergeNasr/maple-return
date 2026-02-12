@@ -7,13 +7,9 @@ across 5-year renewal boundaries with rate changes and payment recalculation.
 from datetime import date
 from decimal import Decimal
 
-import pytest
-
 from maple_return.mortgage import (
     MortgageInput,
-    ScenarioResult,
     TermDefinition,
-    TermSummary,
     calculate_multi_term,
     calculate_standard_payment,
 )
@@ -200,15 +196,15 @@ class TestScenarioComparison:
             assert len(result.terms) == 2
 
     def test_scenario_with_early_payoff(self):
-        """High payment should pay off mortgage before term ends."""
-        # Calculate a payment that will pay off faster
+        """Mortgage that pays off within a term should stop early."""
+        # Use a payment that will pay off within the first term (< 60 months)
+        # Calculate standard 60-month payment and add extra to ensure early payoff
         from maple_return.mortgage import calculate_monthly_rate
 
-        principal = Decimal("320000")  # 400k - 80k
+        principal = Decimal("320000")
         monthly_rate = calculate_monthly_rate(Decimal("0.05"))
-        high_payment = calculate_standard_payment(
-            principal, monthly_rate, 180
-        )  # 15-year payoff
+        payment_60 = calculate_standard_payment(principal, monthly_rate, 60)
+        high_payment = payment_60 + Decimal("200")  # Pay off faster than 60 months
 
         input_data = MortgageInput(
             purchase_price=Decimal("400000"),
@@ -226,9 +222,12 @@ class TestScenarioComparison:
         results = calculate_multi_term(input_data)
         scenario = results[0]
 
-        # Should pay off early (before 30 years)
-        assert scenario.months_to_payoff < 360
+        # Should pay off early (within first term, before 60 months)
+        assert scenario.months_to_payoff < 60
         assert scenario.final_balance == Decimal("0.00")
+
+        # Should only have 1 term (paid off before renewal)
+        assert len(scenario.terms) == 1
 
         # Last entry should have zero balance
         assert scenario.schedule[-1].balance == Decimal("0.00")
