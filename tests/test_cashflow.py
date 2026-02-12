@@ -3,16 +3,12 @@
 from datetime import date
 from decimal import Decimal
 
-import pytest
-
 from maple_return.cashflow import (
-    AnnualOperatingSummary,
-    MonthlyCashFlow,
     convert_to_usd,
     generate_annual_operating_summaries,
     generate_monthly_cashflows,
 )
-from maple_return.mortgage import MortgageInput, TermDefinition, calculate_multi_term
+from maple_return.mortgage import MortgageInput, calculate_multi_term
 from maple_return.operating import OperatingInput
 
 
