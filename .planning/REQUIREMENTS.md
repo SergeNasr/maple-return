@@ -18,15 +18,15 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Income & Expenses
 
-- [ ] **OPEX-01**: User can input monthly rental income amount
-- [ ] **OPEX-02**: User can input vacancy rate or specific vacant months
-- [ ] **OPEX-03**: User can input annual operating costs: property tax, insurance, maintenance
-- [ ] **OPEX-04**: User can set annual escalation percentages for rent and expenses
+- [x] **OPEX-01**: User can input monthly rental income amount
+- [x] **OPEX-02**: User can input vacancy rate or specific vacant months
+- [x] **OPEX-03**: User can input annual operating costs: property tax, insurance, maintenance
+- [x] **OPEX-04**: User can set annual escalation percentages for rent and expenses
 
 ### FX & Cross-Border
 
-- [ ] **FX-01**: User can input a single fixed CAD/USD exchange rate
-- [ ] **FX-02**: All monetary outputs are shown in both CAD and USD
+- [x] **FX-01**: User can input a single fixed CAD/USD exchange rate
+- [x] **FX-02**: All monetary outputs are shown in both CAD and USD
 
 ### Exit Strategy
 
@@ -86,12 +86,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | MORT-04 | Deferred | Deferred (single rate per term decided) |
 | MORT-05 | Phase 2 | ✓ Complete |
 | MORT-06 | Phase 2 | ✓ Complete |
-| OPEX-01 | Phase 3 | Pending |
-| OPEX-02 | Phase 3 | Pending |
-| OPEX-03 | Phase 3 | Pending |
-| OPEX-04 | Phase 3 | Pending |
-| FX-01 | Phase 3 | Pending |
-| FX-02 | Phase 3 | Pending |
+| OPEX-01 | Phase 3 | ✓ Complete |
+| OPEX-02 | Phase 3 | ✓ Complete |
+| OPEX-03 | Phase 3 | ✓ Complete |
+| OPEX-04 | Phase 3 | ✓ Complete |
+| FX-01 | Phase 3 | ✓ Complete |
+| FX-02 | Phase 3 | ✓ Complete |
 | EXIT-01 | Phase 5 | Pending |
 | EXIT-02 | Phase 5 | Pending |
 | EXIT-03 | Phase 5 | Pending |
@@ -114,4 +114,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-02-08*
-*Last updated: 2026-02-12 after Phase 2 completion*
+*Last updated: 2026-02-12 after Phase 3 completion*
