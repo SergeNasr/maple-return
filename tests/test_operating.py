@@ -6,7 +6,6 @@ from decimal import Decimal
 import pytest
 
 from maple_return.operating import (
-    MonthlyOperating,
     OperatingInput,
     calculate_monthly_operating,
     generate_operating_schedule,
@@ -78,10 +77,6 @@ def test_monthly_expenses_from_annual(base_input):
 
 def test_expense_escalation(base_input):
     """Expenses increase after anniversary."""
-    # Month 1 - base expenses
-    result_month_1 = calculate_monthly_operating(base_input, date(2024, 1, 1))
-    base_property_tax = result_month_1.property_tax
-
     # Month 13 - one year anniversary, expenses escalate
     result_month_13 = calculate_monthly_operating(base_input, date(2025, 1, 1))
     expected_property_tax = (Decimal("4000.00") / 12) * (Decimal("1.02") ** 1)
@@ -101,10 +96,6 @@ def test_management_fee_scales_with_gross_rent(base_input):
 
 def test_management_fee_increases_with_rent_escalation(base_input):
     """As rent escalates, management fee escalates too."""
-    # Month 1 - base fee
-    result_month_1 = calculate_monthly_operating(base_input, date(2024, 1, 1))
-    base_fee = result_month_1.management_fee
-
     # Month 13 - one year later, rent escalated, so fee escalates too
     result_month_13 = calculate_monthly_operating(base_input, date(2025, 1, 1))
     escalated_rent = Decimal("2500.00") * Decimal("1.02")
