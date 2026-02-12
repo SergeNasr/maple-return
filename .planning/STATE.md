@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-08)
 ## Current Position
 
 Phase: 3 of 6 (Operating Model)
-Plan: 1 of 2 in current phase
-Status: In Progress
-Last activity: 2026-02-12 — Completed plan 03-01 (Operating Income and Expense Engine)
+Plan: 2 of 2 in current phase
+Status: Completed
+Last activity: 2026-02-12 — Completed plan 03-02 (Cash Flow Integration and FX Conversion)
 
-Progress: [█████░░░░░] 50% (1/2 plans in phase 03)
+Progress: [██████████] 100% (2/2 plans in phase 03)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 7
-- Average duration: 6.3 min
-- Total execution time: 0.73 hours
+- Total plans completed: 8
+- Average duration: 5.9 min
+- Total execution time: 0.78 hours
 
 **By Phase:**
 
@@ -29,11 +29,11 @@ Progress: [█████░░░░░] 50% (1/2 plans in phase 03)
 |-------|-------|-------|----------|
 | 01-foundation | 3 | 29.2 min | 9.7 min |
 | 02-mortgage-engine | 3 | 12.0 min | 4.0 min |
-| 03-operating-model | 1 | 2.8 min | 2.8 min |
+| 03-operating-model | 2 | 5.7 min | 2.85 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-01 (5.0min), 02-02 (4.0min), 02-03 (3.0min), 03-01 (2.8min)
-- Trend: Consistent efficiency with TDD approach, operating model plan very fast
+- Last 5 plans: 02-02 (4.0min), 02-03 (3.0min), 03-01 (2.8min), 03-02 (2.9min)
+- Trend: Excellent efficiency with TDD approach, phase 03 complete in record time
 
 *Updated after each plan completion*
 
@@ -91,6 +91,11 @@ Recent decisions affecting current work:
 - Management fee calculated as % of gross rent (not effective rent after vacancy)
 - Compounding escalation formula: base * (1 + rate)^years (not simple interest)
 
+**From plan 03-02:**
+- FX conversion divides CAD by CAD-per-USD rate (locked decision from 03-CONTEXT.md)
+- Use itertools.groupby for annual summaries (efficient, handles partial years naturally)
+- USD amounts only in summaries (not all line items) - focused on high-level metrics
+
 ### Pending Todos
 
 None yet.
@@ -102,5 +107,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-12
-Stopped at: Completed 03-01-PLAN.md (Operating Income and Expense Engine)
-Resume file: .planning/phases/03-operating-model/03-01-SUMMARY.md
+Stopped at: Completed 03-02-PLAN.md (Cash Flow Integration and FX Conversion)
+Resume file: .planning/phases/03-operating-model/03-02-SUMMARY.md
