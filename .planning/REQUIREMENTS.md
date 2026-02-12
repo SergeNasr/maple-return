@@ -12,7 +12,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **MORT-01**: User can input purchase date, purchase price, and down payment
 - [ ] **MORT-02**: User can input mortgage rate (variable), payment amount (fixed), and 30-year amortization period
 - [ ] **MORT-03**: Tool generates full amortization schedule with monthly principal/interest split
-- [ ] **MORT-04**: User can model rate changes within a term (interest/principal split adjusts, payment stays fixed)
+- [ ] **MORT-04**: ~~User can model rate changes within a term~~ — Deferred: user decided single rate per term during Phase 2 context gathering. Rate changes happen at 5-year renewal boundaries (MORT-05).
 - [ ] **MORT-05**: User can define 5-year term renewal scenarios (switch variable↔fixed, set new rate)
 - [ ] **MORT-06**: Tool projects mortgage across multiple term renewals through full amortization
 
@@ -83,7 +83,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | MORT-01 | Phase 2 | Pending |
 | MORT-02 | Phase 2 | Pending |
 | MORT-03 | Phase 2 | Pending |
-| MORT-04 | Phase 2 | Pending |
+| MORT-04 | Deferred | Deferred (single rate per term decided) |
 | MORT-05 | Phase 2 | Pending |
 | MORT-06 | Phase 2 | Pending |
 | OPEX-01 | Phase 3 | Pending |
@@ -106,7 +106,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 **Coverage:**
 - v1 requirements: 23 total
-- Mapped to phases: 23
+- Mapped to phases: 22
+- Deferred: 1 (MORT-04)
 - Unmapped: 0
 
 **Note:** Phase 1 (Foundation) has no explicit requirements but provides infrastructure needed for all subsequent phases.

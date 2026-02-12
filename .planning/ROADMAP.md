@@ -40,13 +40,13 @@ Plans:
 ### Phase 2: Mortgage Engine
 **Goal**: Tool accurately calculates Canadian mortgage amortization across multiple terms
 **Depends on**: Phase 1
-**Requirements**: MORT-01, MORT-02, MORT-03, MORT-04, MORT-05, MORT-06
+**Requirements**: MORT-01, MORT-02, MORT-03, MORT-05, MORT-06
 **Success Criteria** (what must be TRUE):
   1. User can input purchase date, price, down payment, rate, payment amount, and amortization period
   2. Tool generates full amortization schedule with monthly principal/interest breakdown
-  3. Rate changes within a term correctly adjust interest/principal split while payment stays fixed
-  4. 5-year term renewals with rate/type changes (variable/fixed) work across full 30-year amortization
-  5. Remaining balance at end of each term is correct
+  3. 5-year term renewals with rate/type changes (variable/fixed) work across full 30-year amortization
+  4. Remaining balance at end of each term is correct
+  5. User can compare 1-3 renewal rate scenarios side by side
 **Plans**: 3 plans
 
 Plans:
