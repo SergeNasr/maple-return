@@ -64,10 +64,11 @@ Plans:
   3. User can set annual escalation percentages for rent and expenses
   4. User can input a single fixed CAD/USD exchange rate
   5. All monetary values display in both CAD and USD
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD (planning phase not started)
+- [ ] 03-01-PLAN.md — Operating income and expense engine (TDD)
+- [ ] 03-02-PLAN.md — Cash flow integration with FX conversion (TDD)
 
 ### Phase 4: Analysis & Metrics
 **Goal**: Tool produces detailed financial analysis and key investment metrics
@@ -120,7 +121,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | ✓ Complete | 2026-02-08 |
 | 2. Mortgage Engine | 3/3 | ✓ Complete | 2026-02-12 |
-| 3. Operating Model | 0/? | Not started | - |
+| 3. Operating Model | 0/2 | Planned | - |
 | 4. Analysis & Metrics | 0/? | Not started | - |
 | 5. Exit Strategy | 0/? | Not started | - |
 | 6. User Interface | 0/? | Not started | - |
