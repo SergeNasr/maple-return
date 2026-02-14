@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-08)
 ## Current Position
 
 Phase: 4 of 6 (Analysis & Metrics)
-Plan: 1 of 2 in current phase
+Plan: 2 of 2 in current phase
 Status: Completed
-Last activity: 2026-02-14 — Completed plan 04-01 (Investment Metrics Engine)
+Last activity: 2026-02-14 — Completed plan 04-02 (P&L Table, Amortization Table, Dashboard Snapshot)
 
-Progress: [█████-----] 50% (1/2 plans in phase 04)
+Progress: [██████████] 100% (2/2 plans in phase 04)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 9
-- Average duration: 5.7 min
-- Total execution time: 0.84 hours
+- Total plans completed: 10
+- Average duration: 5.5 min
+- Total execution time: 0.95 hours
 
 **By Phase:**
 
@@ -30,10 +30,10 @@ Progress: [█████-----] 50% (1/2 plans in phase 04)
 | 01-foundation | 3 | 29.2 min | 9.7 min |
 | 02-mortgage-engine | 3 | 12.0 min | 4.0 min |
 | 03-operating-model | 2 | 5.7 min | 2.85 min |
-| 04-analysis-metrics | 1 | 3.3 min | 3.3 min |
+| 04-analysis-metrics | 2 | 6.7 min | 3.35 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-03 (3.0min), 03-01 (2.8min), 03-02 (2.9min), 04-01 (3.3min)
+- Last 5 plans: 03-01 (2.8min), 03-02 (2.9min), 04-01 (3.3min), 04-02 (3.4min)
 - Trend: Consistent sub-4-minute execution with TDD approach
 
 *Updated after each plan completion*
@@ -103,6 +103,13 @@ Recent decisions affecting current work:
 - All metrics quantized to 4 decimal places for percentage display precision
 - Error handling returns zero/None (not exceptions) for invalid cases
 
+**From plan 04-02:**
+- First year always flagged as partial (purchase year per user decision)
+- Equity gained computed as year-over-year change (year 1 relative to down payment)
+- Dashboard filters cashflows to today for current position snapshot
+- Dashboard annualizes metrics from most recent 12 months (or available months)
+- Months held calculation includes current month if day >= purchase day
+
 ### Pending Todos
 
 None yet.
@@ -114,5 +121,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-14
-Stopped at: Completed 04-01-PLAN.md (Investment Metrics Engine)
-Resume file: .planning/phases/04-analysis-metrics/04-01-SUMMARY.md
+Stopped at: Completed 04-02-PLAN.md (P&L Table, Amortization Table, Dashboard Snapshot)
+Resume file: .planning/phases/04-analysis-metrics/04-02-SUMMARY.md
