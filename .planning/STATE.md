@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-08)
 
 **Core value:** The owner can clearly see how their Canadian rental property investment is performing and project where it's headed under different scenarios, so they can make informed hold/sell/refinance decisions.
-**Current focus:** Phase 3 - Operating Model
+**Current focus:** Phase 4 - Analysis & Metrics
 
 ## Current Position
 
-Phase: 3 of 6 (Operating Model)
-Plan: 2 of 2 in current phase
+Phase: 4 of 6 (Analysis & Metrics)
+Plan: 1 of 2 in current phase
 Status: Completed
-Last activity: 2026-02-12 — Completed plan 03-02 (Cash Flow Integration and FX Conversion)
+Last activity: 2026-02-14 — Completed plan 04-01 (Investment Metrics Engine)
 
-Progress: [██████████] 100% (2/2 plans in phase 03)
+Progress: [█████-----] 50% (1/2 plans in phase 04)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
-- Average duration: 5.9 min
-- Total execution time: 0.78 hours
+- Total plans completed: 9
+- Average duration: 5.7 min
+- Total execution time: 0.84 hours
 
 **By Phase:**
 
@@ -30,10 +30,11 @@ Progress: [██████████] 100% (2/2 plans in phase 03)
 | 01-foundation | 3 | 29.2 min | 9.7 min |
 | 02-mortgage-engine | 3 | 12.0 min | 4.0 min |
 | 03-operating-model | 2 | 5.7 min | 2.85 min |
+| 04-analysis-metrics | 1 | 3.3 min | 3.3 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-02 (4.0min), 02-03 (3.0min), 03-01 (2.8min), 03-02 (2.9min)
-- Trend: Excellent efficiency with TDD approach, phase 03 complete in record time
+- Last 5 plans: 02-03 (3.0min), 03-01 (2.8min), 03-02 (2.9min), 04-01 (3.3min)
+- Trend: Consistent sub-4-minute execution with TDD approach
 
 *Updated after each plan completion*
 
@@ -96,6 +97,12 @@ Recent decisions affecting current work:
 - Use itertools.groupby for annual summaries (efficient, handles partial years naturally)
 - USD amounts only in summaries (not all line items) - focused on high-level metrics
 
+**From plan 04-01:**
+- IRR solver uses Newton-Raphson with 1e-6 tolerance for practical convergence
+- Partial year annualization uses linear scaling (value/months)*12 for comparability
+- All metrics quantized to 4 decimal places for percentage display precision
+- Error handling returns zero/None (not exceptions) for invalid cases
+
 ### Pending Todos
 
 None yet.
@@ -106,6 +113,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-12
-Stopped at: Completed 03-02-PLAN.md (Cash Flow Integration and FX Conversion)
-Resume file: .planning/phases/03-operating-model/03-02-SUMMARY.md
+Last session: 2026-02-14
+Stopped at: Completed 04-01-PLAN.md (Investment Metrics Engine)
+Resume file: .planning/phases/04-analysis-metrics/04-01-SUMMARY.md
