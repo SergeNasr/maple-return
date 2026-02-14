@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Foundation** - Project setup, tooling, data models ✓
 - [x] **Phase 2: Mortgage Engine** - Canadian mortgage amortization with term renewals ✓
 - [x] **Phase 3: Operating Model** - Income, expenses, FX conversion ✓
-- [ ] **Phase 4: Analysis & Metrics** - Financial calculations and detailed outputs
+- [x] **Phase 4: Analysis & Metrics** - Financial calculations and detailed outputs ✓
 - [ ] **Phase 5: Exit Strategy** - Sale modeling and total return calculation
 - [ ] **Phase 6: User Interface** - Web forms and table display
 
@@ -82,8 +82,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Investment metrics engine: IRR, cap rate, cash-on-cash, equity growth (TDD)
-- [ ] 04-02-PLAN.md — P&L table, amortization table, and dashboard snapshot (TDD)
+- [x] 04-01-PLAN.md — Investment metrics engine: IRR, cap rate, cash-on-cash, equity growth (TDD)
+- [x] 04-02-PLAN.md — P&L table, amortization table, and dashboard snapshot (TDD)
 
 ### Phase 5: Exit Strategy
 **Goal**: Tool models property sale and calculates total investment return
@@ -123,10 +123,10 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Foundation | 3/3 | ✓ Complete | 2026-02-08 |
 | 2. Mortgage Engine | 3/3 | ✓ Complete | 2026-02-12 |
 | 3. Operating Model | 2/2 | ✓ Complete | 2026-02-12 |
-| 4. Analysis & Metrics | 0/2 | Planned | - |
+| 4. Analysis & Metrics | 2/2 | ✓ Complete | 2026-02-13 |
 | 5. Exit Strategy | 0/? | Not started | - |
 | 6. User Interface | 0/? | Not started | - |
 
 ---
 *Roadmap created: 2026-02-08*
-*Last updated: 2026-02-12 after Phase 3 completion*
+*Last updated: 2026-02-13 after Phase 4 completion*

@@ -37,10 +37,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Analysis & Output
 
-- [ ] **OUT-01**: Tool displays detailed monthly amortization table
-- [ ] **OUT-02**: Tool displays year-by-year P&L (income, expenses, net cash flow)
-- [ ] **OUT-03**: Tool calculates and displays key metrics: IRR, ROI, cap rate, cash-on-cash return, equity growth
-- [ ] **OUT-04**: Dashboard shows current snapshot: equity position, cash flow to date, returns to date
+- [x] **OUT-01**: Tool displays detailed monthly amortization table
+- [x] **OUT-02**: Tool displays year-by-year P&L (income, expenses, net cash flow)
+- [x] **OUT-03**: Tool calculates and displays key metrics: IRR, ROI, cap rate, cash-on-cash return, equity growth
+- [x] **OUT-04**: Dashboard shows current snapshot: equity position, cash flow to date, returns to date
 
 ### Interface
 
@@ -96,10 +96,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | EXIT-02 | Phase 5 | Pending |
 | EXIT-03 | Phase 5 | Pending |
 | EXIT-04 | Phase 5 | Pending |
-| OUT-01 | Phase 4 | Pending |
-| OUT-02 | Phase 4 | Pending |
-| OUT-03 | Phase 4 | Pending |
-| OUT-04 | Phase 4 | Pending |
+| OUT-01 | Phase 4 | ✓ Complete |
+| OUT-02 | Phase 4 | ✓ Complete |
+| OUT-03 | Phase 4 | ✓ Complete |
+| OUT-04 | Phase 4 | ✓ Complete |
 | UI-01 | Phase 6 | Pending |
 | UI-02 | Phase 6 | Pending |
 | UI-03 | Phase 6 | Pending |
