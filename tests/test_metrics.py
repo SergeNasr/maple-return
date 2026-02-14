@@ -3,11 +3,10 @@
 from datetime import date
 from decimal import Decimal
 
-import pytest
+from dateutil.relativedelta import relativedelta
 
 from maple_return.cashflow import AnnualOperatingSummary, MonthlyCashFlow
 from maple_return.metrics import (
-    AnnualMetrics,
     calculate_annual_metrics,
     calculate_cap_rate,
     calculate_cash_on_cash,
@@ -22,9 +21,10 @@ class TestIRR:
     def test_positive_irr_with_monthly_positive_cashflows(self):
         """IRR calculation with positive monthly cash flows and terminal value."""
         down_payment = Decimal("100000")
+        start_date = date(2024, 1, 1)
         monthly_cashflows = [
             MonthlyCashFlow(
-                month=date(2024, i, 1),
+                month=start_date + relativedelta(months=i),
                 gross_rent=Decimal("2000"),
                 vacancy_deduction=Decimal("100"),
                 effective_rent=Decimal("1900"),
@@ -41,7 +41,7 @@ class TestIRR:
                 net_cashflow_usd=Decimal("370"),
                 noi_usd=Decimal("925"),
             )
-            for i in range(1, 61)
+            for i in range(60)
         ]
         current_property_value = Decimal("500000")
 
