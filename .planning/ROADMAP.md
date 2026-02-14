@@ -94,10 +94,11 @@ Plans:
   2. User can input agent commissions and closing fees
   3. Tool calculates net proceeds from sale after all fees
   4. Tool calculates total return for the full hold period including exit proceeds
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD (planning phase not started)
+- [ ] 05-01-PLAN.md — Exit model: sale costs, net proceeds waterfall, appreciation rate (TDD)
+- [ ] 05-02-PLAN.md — Total return with exit: hold-period IRR, ROI, cash flow truncation (TDD)
 
 ### Phase 6: User Interface
 **Goal**: Web-based interface allows user to input data and view results
@@ -124,9 +125,9 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2. Mortgage Engine | 3/3 | ✓ Complete | 2026-02-12 |
 | 3. Operating Model | 2/2 | ✓ Complete | 2026-02-12 |
 | 4. Analysis & Metrics | 2/2 | ✓ Complete | 2026-02-13 |
-| 5. Exit Strategy | 0/? | Not started | - |
+| 5. Exit Strategy | 0/2 | Planned | - |
 | 6. User Interface | 0/? | Not started | - |
 
 ---
 *Roadmap created: 2026-02-08*
-*Last updated: 2026-02-13 after Phase 4 completion*
+*Last updated: 2026-02-14 after Phase 5 planning*
