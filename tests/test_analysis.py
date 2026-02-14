@@ -3,13 +3,10 @@
 from datetime import date
 from decimal import Decimal
 
-import pytest
 from dateutil.relativedelta import relativedelta
 
 from maple_return.analysis import (
     AmortizationRow,
-    DashboardSnapshot,
-    PnLRow,
     build_amortization_table,
     build_dashboard_snapshot,
     build_pnl_table,
@@ -55,7 +52,8 @@ class TestAmortizationTable:
 
     def test_build_amortization_table_full_schedule(self):
         """Test 360-month schedule produces 360 rows."""
-        # Create 360 entries
+        # Create 360 entries with realistic payoff
+        # Start with 180k balance, pay off 500/month for 360 months
         schedule = [
             AmortizationEntry(
                 month_number=i,
@@ -63,7 +61,7 @@ class TestAmortizationTable:
                 payment=Decimal("2000.00"),
                 principal=Decimal("500.00"),
                 interest=Decimal("1500.00"),
-                balance=Decimal("300000.00") - Decimal("500.00") * i,
+                balance=max(Decimal("0.00"), Decimal("180000.00") - Decimal("500.00") * i),
             )
             for i in range(1, 361)
         ]
@@ -71,8 +69,8 @@ class TestAmortizationTable:
         table = build_amortization_table(schedule)
 
         assert len(table) == 360
-        # Final balance should be zero or near-zero
-        assert table[-1].balance <= Decimal("1.00")
+        # Final balance should be zero (180k / 500 = 360 months)
+        assert table[-1].balance == Decimal("0.00")
 
     def test_build_amortization_table_empty(self):
         """Test empty schedule returns empty table."""
@@ -349,7 +347,8 @@ class TestDashboardSnapshot:
         assert dashboard.cumulative_cashflow == Decimal("-1200.00")  # -100 * 12
         assert dashboard.cumulative_cashflow_usd < Decimal("0")
         # IRR should be calculated (could be None or a value)
-        assert dashboard.annualized_return_irr is not None or dashboard.annualized_return_irr is None
+        # Just check that the field exists (can be None or Decimal)
+        assert hasattr(dashboard, "annualized_return_irr")
         # Cap rate and cash-on-cash should be present
         assert dashboard.current_cap_rate is not None
         assert dashboard.cash_on_cash_return is not None
