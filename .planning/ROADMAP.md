@@ -79,10 +79,11 @@ Plans:
   2. Tool displays year-by-year P&L showing income, expenses, net cash flow
   3. Dashboard shows current snapshot: equity position, cash flow to date, returns to date
   4. Key metrics are calculated and displayed: IRR, ROI, cap rate, cash-on-cash return, equity growth
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD (planning phase not started)
+- [ ] 04-01-PLAN.md — Investment metrics engine: IRR, cap rate, cash-on-cash, equity growth (TDD)
+- [ ] 04-02-PLAN.md — P&L table, amortization table, and dashboard snapshot (TDD)
 
 ### Phase 5: Exit Strategy
 **Goal**: Tool models property sale and calculates total investment return
@@ -122,7 +123,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Foundation | 3/3 | ✓ Complete | 2026-02-08 |
 | 2. Mortgage Engine | 3/3 | ✓ Complete | 2026-02-12 |
 | 3. Operating Model | 2/2 | ✓ Complete | 2026-02-12 |
-| 4. Analysis & Metrics | 0/? | Not started | - |
+| 4. Analysis & Metrics | 0/2 | Planned | - |
 | 5. Exit Strategy | 0/? | Not started | - |
 | 6. User Interface | 0/? | Not started | - |
 
