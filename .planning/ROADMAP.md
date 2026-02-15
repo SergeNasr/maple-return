@@ -109,10 +109,12 @@ Plans:
   2. Scenario controls allow user to adjust mortgage rates and term renewal parameters
   3. Results display as detailed tables (amortization, P&L, metrics)
   4. User can run complete simulation from input to results in web browser
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] TBD (planning phase not started)
+- [ ] 06-01-PLAN.md — Backend foundation: DB model, API routes (save/load/simulate), HTMX + CSS
+- [ ] 06-02-PLAN.md — Wizard form: 5-step input flow with validation and auto-save
+- [ ] 06-03-PLAN.md — Results dashboard, detail tables, and end-to-end verification
 
 ## Progress
 
