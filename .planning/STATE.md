@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-08)
 
 **Core value:** The owner can clearly see how their Canadian rental property investment is performing and project where it's headed under different scenarios, so they can make informed hold/sell/refinance decisions.
-**Current focus:** Phase 4 - Analysis & Metrics
+**Current focus:** Phase 5 - Exit Strategy
 
 ## Current Position
 
-Phase: 4 of 6 (Analysis & Metrics)
-Plan: 2 of 2 in current phase
+Phase: 5 of 6 (Exit Strategy)
+Plan: 1 of 2 in current phase
 Status: Completed
-Last activity: 2026-02-14 — Completed plan 04-02 (P&L Table, Amortization Table, Dashboard Snapshot)
+Last activity: 2026-02-15 — Completed plan 05-01 (Exit Model)
 
-Progress: [██████████] 100% (2/2 plans in phase 04)
+Progress: [█████░░░░░] 50% (1/2 plans in phase 05)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 10
-- Average duration: 5.5 min
-- Total execution time: 0.95 hours
+- Total plans completed: 11
+- Average duration: 5.1 min
+- Total execution time: 0.99 hours
 
 **By Phase:**
 
@@ -31,10 +31,11 @@ Progress: [██████████] 100% (2/2 plans in phase 04)
 | 02-mortgage-engine | 3 | 12.0 min | 4.0 min |
 | 03-operating-model | 2 | 5.7 min | 2.85 min |
 | 04-analysis-metrics | 2 | 6.7 min | 3.35 min |
+| 05-exit-strategy | 1 | 2.2 min | 2.2 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-01 (2.8min), 03-02 (2.9min), 04-01 (3.3min), 04-02 (3.4min)
-- Trend: Consistent sub-4-minute execution with TDD approach
+- Last 5 plans: 03-02 (2.9min), 04-01 (3.3min), 04-02 (3.4min), 05-01 (2.2min)
+- Trend: TDD approach consistently delivering sub-4-minute execution
 
 *Updated after each plan completion*
 
@@ -110,6 +111,13 @@ Recent decisions affecting current work:
 - Dashboard annualizes metrics from most recent 12 months (or available months)
 - Months held calculation includes current month if day >= purchase day
 
+**From plan 05-01:**
+- Use single commission rate (not buyer/seller split) for simplicity
+- Pass-through closing costs as flat amount (not itemized)
+- No mortgage discharge penalty per user decision
+- Appreciation rate is informational only (not used for total return yet)
+- USD conversions for sale_price and net_proceeds only (not all intermediate values)
+
 ### Pending Todos
 
 None yet.
@@ -120,6 +128,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-14
-Stopped at: Completed 04-02-PLAN.md (P&L Table, Amortization Table, Dashboard Snapshot)
-Resume file: .planning/phases/04-analysis-metrics/04-02-SUMMARY.md
+Last session: 2026-02-15
+Stopped at: Completed 05-01-PLAN.md (Exit Model)
+Resume file: .planning/phases/05-exit-strategy/05-01-SUMMARY.md
