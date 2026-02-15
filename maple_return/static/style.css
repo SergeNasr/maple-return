@@ -1,4 +1,10 @@
-/* Maple Return - Minimal, clean styles */
+/* Maple Return - Spreadsheet-meets-modern-web aesthetic
+ * Clean, minimal, white background, subtle grays, focus on data
+ */
+
+/* ===========================
+   RESET & BASE
+   =========================== */
 
 * {
     margin: 0;
@@ -10,18 +16,48 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     line-height: 1.6;
     color: #333;
-    background-color: #f9f9f9;
-    padding: 2rem;
+    background-color: #f5f5f5;
+}
+
+/* ===========================
+   LAYOUT
+   =========================== */
+
+.header {
+    background: white;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+}
+
+.header .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.header .app-name {
+    color: #d32f2f;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.header .app-name:hover {
+    color: #b71c1c;
 }
 
 .container {
-    max-width: 900px;
+    max-width: 1100px;
     margin: 0 auto;
     background: white;
     padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
+
+/* ===========================
+   TYPOGRAPHY
+   =========================== */
 
 h1 {
     color: #d32f2f;
@@ -33,6 +69,14 @@ h2 {
     color: #555;
     margin-top: 1.5rem;
     margin-bottom: 0.75rem;
+    font-size: 1.5rem;
+}
+
+h3 {
+    color: #666;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
 }
 
 p {
@@ -46,4 +90,417 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+/* ===========================
+   WIZARD PROGRESS
+   =========================== */
+
+.wizard-progress {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.wizard-progress .step {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    color: #999;
+    font-size: 0.875rem;
+}
+
+.wizard-progress .step::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 32px;
+    margin: 0 auto 0.5rem;
+    border-radius: 50%;
+    background: #e0e0e0;
+    border: 2px solid #e0e0e0;
+}
+
+.wizard-progress .step.completed::before {
+    background: #4caf50;
+    border-color: #4caf50;
+    content: '\2713';
+    color: white;
+    font-weight: bold;
+    line-height: 28px;
+}
+
+.wizard-progress .step.active {
+    color: #d32f2f;
+    font-weight: 600;
+}
+
+.wizard-progress .step.active::before {
+    background: white;
+    border-color: #d32f2f;
+    border-width: 3px;
+}
+
+/* ===========================
+   WIZARD FORMS
+   =========================== */
+
+.wizard-step {
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #555;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #1976d2;
+}
+
+.form-group input.error,
+.form-group select.error {
+    border-color: #d32f2f;
+}
+
+.form-group .error-message {
+    color: #d32f2f;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.form-group .hint {
+    color: #999;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* ===========================
+   WIZARD NAVIGATION
+   =========================== */
+
+.wizard-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e0e0e0;
+}
+
+.wizard-nav .left {
+    flex: 1;
+}
+
+.wizard-nav .right {
+    flex: 1;
+    text-align: right;
+}
+
+/* ===========================
+   BUTTONS
+   =========================== */
+
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: white;
+    color: #333;
+}
+
+.btn:hover {
+    background: #f5f5f5;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: #d32f2f;
+    color: white;
+    border-color: #d32f2f;
+}
+
+.btn-primary:hover {
+    background: #b71c1c;
+    border-color: #b71c1c;
+}
+
+.btn-secondary {
+    background: #1976d2;
+    color: white;
+    border-color: #1976d2;
+}
+
+.btn-secondary:hover {
+    background: #1565c0;
+    border-color: #1565c0;
+}
+
+/* ===========================
+   DASHBOARD
+   =========================== */
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.metric-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.metric-card .label {
+    font-size: 0.875rem;
+    color: #777;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.metric-card .value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0.25rem;
+}
+
+.metric-card .sub {
+    font-size: 0.875rem;
+    color: #999;
+}
+
+.chart-container {
+    height: 100px;
+    background: #fafafa;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    font-size: 0.875rem;
+}
+
+/* ===========================
+   TABLES
+   =========================== */
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+    font-size: 0.875rem;
+}
+
+.data-table thead th {
+    background: #f5f5f5;
+    padding: 0.75rem;
+    text-align: left;
+    font-weight: 600;
+    color: #555;
+    border-bottom: 2px solid #d0d0d0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.data-table thead th.text-right {
+    text-align: right;
+}
+
+.data-table tbody td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.data-table tbody td.text-right,
+.data-table tbody td.currency,
+.data-table tbody td.percentage {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.data-table tbody tr:nth-child(even) {
+    background: #fafafa;
+}
+
+.data-table tbody tr:hover {
+    background: #f0f0f0;
+}
+
+.data-table .negative {
+    color: #d32f2f;
+}
+
+.data-table .partial-year {
+    font-style: italic;
+    color: #777;
+}
+
+/* ===========================
+   TABS
+   =========================== */
+
+.tabs {
+    display: flex;
+    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 1.5rem;
+}
+
+.tab {
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    color: #777;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.tab:hover {
+    color: #333;
+}
+
+.tab.active {
+    color: #d32f2f;
+    border-bottom-color: #d32f2f;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* ===========================
+   SCENARIO COMPARISON
+   =========================== */
+
+.scenario-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.scenario-column {
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 1.5rem;
+}
+
+.scenario-column h3 {
+    margin-top: 0;
+    color: #d32f2f;
+}
+
+/* ===========================
+   UTILITY CLASSES
+   =========================== */
+
+.currency {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.percentage {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* ===========================
+   HTMX LOADING INDICATOR
+   =========================== */
+
+.htmx-indicator {
+    display: none;
+}
+
+.htmx-request .htmx-indicator {
+    display: inline-block;
+    margin-left: 0.5rem;
+}
+
+.htmx-indicator::after {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #d32f2f;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ===========================
+   FLASH MESSAGES
+   =========================== */
+
+.flash-success {
+    background: #e8f5e9;
+    border: 1px solid #4caf50;
+    color: #2e7d32;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+.flash-error {
+    background: #ffebee;
+    border: 1px solid #d32f2f;
+    color: #c62828;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
 }
