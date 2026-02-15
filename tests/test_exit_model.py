@@ -2,11 +2,8 @@
 
 from decimal import Decimal
 
-import pytest
-
 from maple_return.exit_model import (
     ExitInput,
-    ExitResult,
     calculate_appreciation_rate,
     calculate_exit,
 )
@@ -182,7 +179,7 @@ def test_appreciation_rate_depreciation():
     Purchase: $500k
     Sale: $400k
     Years: 3
-    Rate: (400k/500k)^(1/3) - 1 = 0.8^0.333... - 1 ≈ -0.0718 (-7.18%)
+    Rate: (400k/500k)^(1/3) - 1 = 0.8^0.333... - 1 ≈ -0.0717 (-7.17%)
     """
     rate = calculate_appreciation_rate(
         purchase_price=Decimal("500000.00"),
@@ -190,8 +187,8 @@ def test_appreciation_rate_depreciation():
         years_held=3,
     )
 
-    # Expected: -0.0718 (negative rate)
-    assert rate == Decimal("-0.0718")
+    # Expected: -0.0717 (negative rate, rounded to 4 decimal places)
+    assert rate == Decimal("-0.0717")
 
 
 def test_full_exit_result_fields():
