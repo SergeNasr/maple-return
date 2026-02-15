@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-08)
 
 **Core value:** The owner can clearly see how their Canadian rental property investment is performing and project where it's headed under different scenarios, so they can make informed hold/sell/refinance decisions.
-**Current focus:** Phase 5 - Exit Strategy
+**Current focus:** Phase 6 - User Interface
 
 ## Current Position
 
-Phase: 5 of 6 (Exit Strategy)
-Plan: 2 of 2 in current phase
-Status: Completed
-Last activity: 2026-02-15 — Completed plan 05-02 (Total Return Calculator)
+Phase: 6 of 6 (User Interface)
+Plan: 2 of 3 in current phase
+Status: In Progress
+Last activity: 2026-02-15 — Completed plan 06-01 (Backend API & Frontend Foundation)
 
-Progress: [██████████] 100% (2/2 plans in phase 05)
+Progress: [███░░░░░░░] 33% (1/3 plans in phase 06)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 12
-- Average duration: 4.9 min
-- Total execution time: 1.06 hours
+- Total plans completed: 13
+- Average duration: 5.2 min
+- Total execution time: 1.21 hours
 
 **By Phase:**
 
@@ -32,10 +32,11 @@ Progress: [██████████] 100% (2/2 plans in phase 05)
 | 03-operating-model | 2 | 5.7 min | 2.85 min |
 | 04-analysis-metrics | 2 | 6.7 min | 3.35 min |
 | 05-exit-strategy | 2 | 6.4 min | 3.2 min |
+| 06-user-interface | 1 | 9.0 min | 9.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 04-01 (3.3min), 04-02 (3.4min), 05-01 (2.2min), 05-02 (4.25min)
-- Trend: TDD approach consistently delivering sub-5-minute execution
+- Last 5 plans: 04-02 (3.4min), 05-01 (2.2min), 05-02 (4.25min), 06-01 (9.0min)
+- Trend: UI/integration plans take longer than pure backend logic
 
 *Updated after each plan completion*
 
@@ -125,6 +126,14 @@ Recent decisions affecting current work:
 - Total profit = cumulative_cashflow + net_proceeds - down_payment
 - Zero down payment edge case returns ROI = 0.0000 (avoid division by zero)
 
+**From plan 06-01:**
+- Use SQLAlchemy ORM with single PropertyConfig row (id=1) for single-property tool
+- Store monetary values as strings to preserve Decimal precision
+- All config fields nullable to support partial auto-save as user fills wizard
+- Simulate endpoint uses purchase_price as current_property_value (no appreciation)
+- HTMX 2.0.4 for progressive enhancement and auto-save behavior
+- CSS designed for "spreadsheet-meets-modern-web" aesthetic per user decision
+
 ### Pending Todos
 
 None yet.
@@ -136,5 +145,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-15
-Stopped at: Completed 05-02-PLAN.md (Total Return Calculator)
-Resume file: .planning/phases/05-exit-strategy/05-02-SUMMARY.md
+Stopped at: Completed 06-01-PLAN.md (Backend API & Frontend Foundation)
+Resume file: .planning/phases/06-user-interface/06-01-SUMMARY.md
