@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-08)
 ## Current Position
 
 Phase: 5 of 6 (Exit Strategy)
-Plan: 1 of 2 in current phase
+Plan: 2 of 2 in current phase
 Status: Completed
-Last activity: 2026-02-15 — Completed plan 05-01 (Exit Model)
+Last activity: 2026-02-15 — Completed plan 05-02 (Total Return Calculator)
 
-Progress: [█████░░░░░] 50% (1/2 plans in phase 05)
+Progress: [██████████] 100% (2/2 plans in phase 05)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 11
-- Average duration: 5.1 min
-- Total execution time: 0.99 hours
+- Total plans completed: 12
+- Average duration: 4.9 min
+- Total execution time: 1.06 hours
 
 **By Phase:**
 
@@ -31,11 +31,11 @@ Progress: [█████░░░░░] 50% (1/2 plans in phase 05)
 | 02-mortgage-engine | 3 | 12.0 min | 4.0 min |
 | 03-operating-model | 2 | 5.7 min | 2.85 min |
 | 04-analysis-metrics | 2 | 6.7 min | 3.35 min |
-| 05-exit-strategy | 1 | 2.2 min | 2.2 min |
+| 05-exit-strategy | 2 | 6.4 min | 3.2 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-02 (2.9min), 04-01 (3.3min), 04-02 (3.4min), 05-01 (2.2min)
-- Trend: TDD approach consistently delivering sub-4-minute execution
+- Last 5 plans: 04-01 (3.3min), 04-02 (3.4min), 05-01 (2.2min), 05-02 (4.25min)
+- Trend: TDD approach consistently delivering sub-5-minute execution
 
 *Updated after each plan completion*
 
@@ -118,6 +118,13 @@ Recent decisions affecting current work:
 - Appreciation rate is informational only (not used for total return yet)
 - USD conversions for sale_price and net_proceeds only (not all intermediate values)
 
+**From plan 05-02:**
+- Cash flows truncate at sale_year * 12 months (clean hold period per user decision)
+- Hold-period IRR uses net_proceeds as terminal value (replaces operations-only IRR)
+- Simple ROI = total_profit / down_payment (per user decision)
+- Total profit = cumulative_cashflow + net_proceeds - down_payment
+- Zero down payment edge case returns ROI = 0.0000 (avoid division by zero)
+
 ### Pending Todos
 
 None yet.
@@ -129,5 +136,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-15
-Stopped at: Completed 05-01-PLAN.md (Exit Model)
-Resume file: .planning/phases/05-exit-strategy/05-01-SUMMARY.md
+Stopped at: Completed 05-02-PLAN.md (Total Return Calculator)
+Resume file: .planning/phases/05-exit-strategy/05-02-SUMMARY.md
