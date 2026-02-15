@@ -245,7 +245,6 @@ def test_total_return_basic():
     """
     # Create 60 months of cash flows (5 years)
     monthly_cashflows = []
-    start_date = date(2020, 6, 1)
     for i in range(60):
         month_date = date(2020 + (6 + i) // 12, ((6 + i) % 12) or 12, 1)
         cf = MonthlyCashFlow(
@@ -326,7 +325,6 @@ def test_total_return_irr_includes_exit():
     """
     # Create simple cash flows: 12 months, negative initially then positive
     monthly_cashflows = []
-    start_date = date(2020, 1, 1)
     for i in range(12):
         month_date = date(2020 + i // 12, (i % 12) + 1, 1)
         # Negative cash flow due to high mortgage
@@ -387,7 +385,6 @@ def test_total_return_cashflow_truncation():
     """
     # Create 360 months of cash flows (30 years)
     monthly_cashflows = []
-    start_date = date(2020, 1, 1)
     for i in range(360):
         month_date = date(2020 + i // 12, (i % 12) + 1, 1)
         cf = MonthlyCashFlow(
@@ -442,7 +439,6 @@ def test_total_return_negative_profit():
     """
     # Create 24 months of negative cash flows
     monthly_cashflows = []
-    start_date = date(2020, 1, 1)
     for i in range(24):
         month_date = date(2020 + i // 12, (i % 12) + 1, 1)
         cf = MonthlyCashFlow(
@@ -504,7 +500,6 @@ def test_total_return_zero_down_payment():
     """
     # Create minimal cash flows
     monthly_cashflows = []
-    start_date = date(2020, 1, 1)
     for i in range(12):
         month_date = date(2020 + i // 12, (i % 12) + 1, 1)
         cf = MonthlyCashFlow(
@@ -555,7 +550,6 @@ def test_total_return_sale_year_zero():
     """
     # Create cash flows but they won't be used
     monthly_cashflows = []
-    start_date = date(2020, 1, 1)
     for i in range(12):
         month_date = date(2020 + i // 12, (i % 12) + 1, 1)
         cf = MonthlyCashFlow(
@@ -605,7 +599,6 @@ def test_total_return_usd_conversion():
     """Test that total_profit_usd is correctly converted."""
     # Create simple cash flows
     monthly_cashflows = []
-    start_date = date(2020, 1, 1)
     for i in range(12):
         month_date = date(2020 + i // 12, (i % 12) + 1, 1)
         cf = MonthlyCashFlow(
@@ -657,7 +650,6 @@ def test_total_return_exit_result_nested():
     """Test that exit_result field contains full waterfall breakdown."""
     # Minimal test to verify exit_result is nested correctly
     monthly_cashflows = []
-    start_date = date(2020, 1, 1)
     for i in range(12):
         month_date = date(2020 + i // 12, (i % 12) + 1, 1)
         cf = MonthlyCashFlow(

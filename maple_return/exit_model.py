@@ -4,12 +4,17 @@ Calculates net proceeds from a property sale, showing waterfall breakdown of:
 sale price → commission → closing costs → mortgage payoff → net proceeds.
 
 Also computes implied appreciation rate to show property value growth over hold period.
+
+Provides total return calculation that combines exit proceeds with cumulative cash flows
+to compute hold-period IRR, simple ROI, and total profit metrics.
 """
 
 from dataclasses import dataclass
+from datetime import date
 from decimal import ROUND_HALF_UP, Decimal
 
-from maple_return.cashflow import convert_to_usd
+from maple_return.cashflow import MonthlyCashFlow, convert_to_usd
+from maple_return.metrics import calculate_irr
 
 
 @dataclass
@@ -47,6 +52,27 @@ class ExitResult:
     net_proceeds_usd: Decimal  # USD conversion of net proceeds
     sale_price_usd: Decimal  # USD conversion of sale price
     implied_appreciation_rate: Decimal  # Annualized appreciation rate
+
+
+@dataclass
+class TotalReturnSummary:
+    """Total return summary for investment with exit.
+
+    Combines cumulative cash flows with exit proceeds to calculate total return
+    metrics including hold-period IRR, simple ROI, and total profit.
+
+    All monetary amounts in CAD unless explicitly marked _usd.
+    """
+
+    hold_period_years: int  # Same as sale_year from ExitInput
+    total_months: int  # Number of months in truncated cash flow series
+    cumulative_net_cashflow: Decimal  # Sum of all monthly net cash flows through sale year (CAD)
+    net_proceeds: Decimal  # From ExitResult (CAD)
+    total_profit: Decimal  # cumulative_net_cashflow + net_proceeds - down_payment (CAD)
+    total_profit_usd: Decimal  # USD conversion
+    simple_roi: Decimal  # total_profit / down_payment (quantized 4 decimal places)
+    hold_period_irr: Decimal | None  # Annualized IRR using truncated flows + net proceeds
+    exit_result: ExitResult  # Full waterfall breakdown (nested)
 
 
 def calculate_appreciation_rate(
@@ -145,4 +171,86 @@ def calculate_exit(exit_input: ExitInput) -> ExitResult:
         net_proceeds_usd=net_proceeds_usd,
         sale_price_usd=sale_price_usd,
         implied_appreciation_rate=appreciation_rate,
+    )
+
+
+def calculate_total_return(
+    exit_input: ExitInput,
+    monthly_cashflows: list[MonthlyCashFlow],
+    purchase_date: date,
+) -> TotalReturnSummary:
+    """Calculate total return including exit proceeds and hold-period IRR.
+
+    Combines cumulative cash flows with exit proceeds to compute total investment
+    return metrics. Cash flows are truncated at the sale year boundary.
+
+    The total return calculation:
+    1. Truncate cash flows to sale_year * 12 months
+    2. Sum net cash flows for cumulative_net_cashflow
+    3. Calculate exit result (net proceeds from sale)
+    4. Compute total_profit = cumulative + net_proceeds - down_payment
+    5. Compute simple_roi = total_profit / down_payment
+    6. Compute hold_period_irr using truncated flows + net_proceeds as terminal value
+
+    Args:
+        exit_input: Exit scenario parameters (sale price, year, costs)
+        monthly_cashflows: List of monthly cash flow entries (all available)
+        purchase_date: Property purchase date for calculating sale month
+
+    Returns:
+        TotalReturnSummary with all return metrics and nested exit breakdown
+    """
+    # 1. Determine sale date and truncate cash flows
+    sale_year = exit_input.sale_year
+    max_months = sale_year * 12
+
+    # Truncate cash flows: keep first sale_year * 12 months (or all if fewer)
+    truncated_cashflows = monthly_cashflows[:max_months]
+    total_months = len(truncated_cashflows)
+
+    # 2. Calculate exit result
+    exit_result = calculate_exit(exit_input)
+
+    # 3. Compute cumulative net cash flow
+    cumulative_net_cashflow = sum(cf.net_cashflow for cf in truncated_cashflows)
+
+    # 4. Compute total profit: cumulative + net_proceeds - down_payment
+    total_profit = (
+        cumulative_net_cashflow + exit_result.net_proceeds - exit_input.down_payment
+    ).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+    # 5. Convert total_profit to USD
+    total_profit_usd = convert_to_usd(total_profit, exit_input.cad_per_usd)
+
+    # 6. Compute simple ROI: total_profit / down_payment
+    if exit_input.down_payment == Decimal("0"):
+        simple_roi = Decimal("0.0000")
+    else:
+        simple_roi = (total_profit / exit_input.down_payment).quantize(
+            Decimal("0.0001"), rounding=ROUND_HALF_UP
+        )
+
+    # 7. Compute hold-period IRR
+    # Use calculate_irr with net_proceeds as terminal value instead of property value
+    if total_months == 0:
+        # No cash flows, IRR cannot be calculated
+        hold_period_irr = None
+    else:
+        hold_period_irr = calculate_irr(
+            down_payment=exit_input.down_payment,
+            monthly_cashflows=truncated_cashflows,
+            current_property_value=exit_result.net_proceeds,  # Terminal value is net proceeds
+        )
+
+    # 8. Return TotalReturnSummary
+    return TotalReturnSummary(
+        hold_period_years=sale_year,
+        total_months=total_months,
+        cumulative_net_cashflow=cumulative_net_cashflow,
+        net_proceeds=exit_result.net_proceeds,
+        total_profit=total_profit,
+        total_profit_usd=total_profit_usd,
+        simple_roi=simple_roi,
+        hold_period_irr=hold_period_irr,
+        exit_result=exit_result,
     )
