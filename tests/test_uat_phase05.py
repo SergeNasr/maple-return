@@ -19,7 +19,6 @@ from maple_return.cashflow import MonthlyCashFlow
 from maple_return.exit_model import (
     ExitInput,
     ExitResult,
-    TotalReturnSummary,
     calculate_appreciation_rate,
     calculate_exit,
     calculate_total_return,

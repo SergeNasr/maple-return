@@ -7,6 +7,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from .database import Base, engine
+from .db_models import PropertyConfig  # noqa: F401 - imported for Base.metadata
+from .routes import router
 
 
 @asynccontextmanager
@@ -31,6 +33,9 @@ templates = Jinja2Templates(directory="maple_return/templates")
 
 # Mount static files
 app.mount("/static", StaticFiles(directory="maple_return/static"), name="static")
+
+# Include API router
+app.include_router(router)
 
 
 @app.get("/")
