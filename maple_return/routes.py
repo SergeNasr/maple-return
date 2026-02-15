@@ -237,41 +237,50 @@ async def simulate(db: AsyncSession = Depends(get_db)) -> dict:
 
     # Generate monthly cashflows
     cashflows = generate_monthly_cashflows(
-        schedule=base_scenario.schedule,
         operating_input=operating_input,
-        purchase_price=Decimal(config.purchase_price),
-        down_payment=Decimal(config.down_payment),
+        mortgage_schedule=base_scenario.schedule,
         cad_per_usd=Decimal(config.cad_per_usd),
     )
 
     # Generate annual summaries
     annual_operating = generate_annual_operating_summaries(
-        cashflows=cashflows,
-        first_year=purchase_date.year,
-        cad_per_usd=Decimal(config.cad_per_usd),
+        monthly_cashflows=cashflows,
     )
 
     annual_mortgage = generate_annual_summaries(
         schedule=base_scenario.schedule,
         purchase_price=Decimal(config.purchase_price),
-        first_year=purchase_date.year,
     )
 
     # Build analysis tables
+    # Use purchase_price as current value (no appreciation assumed for ongoing property)
+    current_property_value = Decimal(config.purchase_price)
+
     pnl_table = build_pnl_table(
-        annual_operating=annual_operating,
-        annual_mortgage=annual_mortgage,
+        annual_summaries=annual_operating,
+        mortgage_annual_summaries=annual_mortgage,
+        purchase_price=Decimal(config.purchase_price),
+        current_property_value=current_property_value,
+        down_payment=Decimal(config.down_payment),
     )
 
     amortization_table = build_amortization_table(
-        annual_mortgage=annual_mortgage,
+        schedule=base_scenario.schedule,
     )
 
     # Build dashboard snapshot
+    # Get most recent remaining balance from mortgage schedule
+    remaining_balance = (
+        base_scenario.schedule[-1].balance if base_scenario.schedule else Decimal("0")
+    )
+
     dashboard = build_dashboard_snapshot(
-        cashflows=cashflows,
-        purchase_price=Decimal(config.purchase_price),
+        monthly_cashflows=cashflows,
+        purchase_date=purchase_date,
         down_payment=Decimal(config.down_payment),
+        current_property_value=current_property_value,
+        remaining_balance=remaining_balance,
+        cad_per_usd=Decimal(config.cad_per_usd),
     )
 
     # Calculate exit if fields present
@@ -285,25 +294,35 @@ async def simulate(db: AsyncSession = Depends(get_db)) -> dict:
             config.closing_costs,
         ]
     ):
+        # Get mortgage balance at sale year (month = sale_year * 12)
+        sale_month_index = config.sale_year * 12 - 1  # 0-indexed
+        if sale_month_index < len(base_scenario.schedule):
+            sale_month_balance = base_scenario.schedule[sale_month_index].balance
+        else:
+            # If sale year is beyond mortgage schedule, use last balance
+            sale_month_balance = (
+                base_scenario.schedule[-1].balance
+                if base_scenario.schedule
+                else Decimal("0")
+            )
+
         exit_input = ExitInput(
             sale_price=Decimal(config.sale_price),
             sale_year=config.sale_year,
             commission_rate=Decimal(config.commission_rate),
             closing_costs=Decimal(config.closing_costs),
+            remaining_mortgage_balance=sale_month_balance,
+            purchase_price=Decimal(config.purchase_price),
+            down_payment=Decimal(config.down_payment),
             cad_per_usd=Decimal(config.cad_per_usd),
         )
 
-        exit_results = calculate_exit(
-            exit_input=exit_input,
-            schedule=base_scenario.schedule,
-            purchase_price=Decimal(config.purchase_price),
-            purchase_date=purchase_date,
-        )
+        exit_results = calculate_exit(exit_input=exit_input)
 
         total_return = calculate_total_return(
-            exit_result=exit_results,
-            cashflows=cashflows,
-            down_payment=Decimal(config.down_payment),
+            exit_input=exit_input,
+            monthly_cashflows=cashflows,
+            purchase_date=purchase_date,
         )
 
     # Compare scenarios
