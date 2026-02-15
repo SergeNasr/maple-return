@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Mortgage Engine** - Canadian mortgage amortization with term renewals ✓
 - [x] **Phase 3: Operating Model** - Income, expenses, FX conversion ✓
 - [x] **Phase 4: Analysis & Metrics** - Financial calculations and detailed outputs ✓
-- [ ] **Phase 5: Exit Strategy** - Sale modeling and total return calculation
+- [x] **Phase 5: Exit Strategy** - Sale modeling and total return calculation ✓
 - [ ] **Phase 6: User Interface** - Web forms and table display
 
 ## Phase Details
@@ -97,8 +97,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 05-01-PLAN.md — Exit model: sale costs, net proceeds waterfall, appreciation rate (TDD)
-- [ ] 05-02-PLAN.md — Total return with exit: hold-period IRR, ROI, cash flow truncation (TDD)
+- [x] 05-01-PLAN.md — Exit model: sale costs, net proceeds waterfall, appreciation rate (TDD)
+- [x] 05-02-PLAN.md — Total return with exit: hold-period IRR, ROI, cash flow truncation (TDD)
 
 ### Phase 6: User Interface
 **Goal**: Web-based interface allows user to input data and view results
@@ -125,9 +125,9 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2. Mortgage Engine | 3/3 | ✓ Complete | 2026-02-12 |
 | 3. Operating Model | 2/2 | ✓ Complete | 2026-02-12 |
 | 4. Analysis & Metrics | 2/2 | ✓ Complete | 2026-02-13 |
-| 5. Exit Strategy | 0/2 | Planned | - |
+| 5. Exit Strategy | 2/2 | ✓ Complete | 2026-02-14 |
 | 6. User Interface | 0/? | Not started | - |
 
 ---
 *Roadmap created: 2026-02-08*
-*Last updated: 2026-02-14 after Phase 5 planning*
+*Last updated: 2026-02-14 after Phase 5 execution*
