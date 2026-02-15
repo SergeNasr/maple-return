@@ -1,0 +1,361 @@
+{% extends "base.html" %}
+
+{% block title %}Property Wizard - Maple Return{% endblock %}
+
+{% block head_extra %}
+<style>
+    .wizard-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem 0;
+    }
+
+    .wizard-step {
+        display: none;
+    }
+
+    .wizard-step.active {
+        display: block;
+    }
+
+    .save-indicator {
+        display: none;
+        color: #4caf50;
+        font-size: 0.875rem;
+        margin-left: 0.5rem;
+    }
+
+    .save-indicator.show {
+        display: inline;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="wizard-container">
+    <h1>Property Investment Wizard</h1>
+
+    <!-- Progress Indicator -->
+    <div class="wizard-progress">
+        <div class="wizard-progress-step active" data-step="1">
+            <div class="step-number">1</div>
+            <div class="step-label">Property</div>
+        </div>
+        <div class="wizard-progress-step" data-step="2">
+            <div class="step-number">2</div>
+            <div class="step-label">Mortgage</div>
+        </div>
+        <div class="wizard-progress-step" data-step="3">
+            <div class="step-number">3</div>
+            <div class="step-label">Operating</div>
+        </div>
+        <div class="wizard-progress-step" data-step="4">
+            <div class="step-number">4</div>
+            <div class="step-label">Scenarios</div>
+        </div>
+        <div class="wizard-progress-step" data-step="5">
+            <div class="step-number">5</div>
+            <div class="step-label">Exit</div>
+        </div>
+    </div>
+
+    <!-- Step Container -->
+    <div id="wizard-steps">
+        <!-- Step 1: Property -->
+        <div class="wizard-step active" data-step="1">
+            {% include "partials/step_property.html" %}
+        </div>
+
+        <!-- Step 2: Mortgage -->
+        <div class="wizard-step" data-step="2">
+            {% include "partials/step_mortgage.html" %}
+        </div>
+
+        <!-- Step 3: Operating -->
+        <div class="wizard-step" data-step="3">
+            {% include "partials/step_operating.html" %}
+        </div>
+
+        <!-- Step 4: Scenarios -->
+        <div class="wizard-step" data-step="4">
+            {% include "partials/step_scenarios.html" %}
+        </div>
+
+        <!-- Step 5: Exit -->
+        <div class="wizard-step" data-step="5">
+            {% include "partials/step_exit.html" %}
+        </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="wizard-navigation">
+        <button type="button" id="btn-back" class="btn btn-secondary" style="display: none;">Back</button>
+        <button type="button" id="btn-next" class="btn btn-primary">Next</button>
+        <button type="button" id="btn-submit" class="btn btn-primary" style="display: none;">Run Simulation</button>
+        <span id="save-indicator" class="save-indicator">Saved</span>
+    </div>
+
+    <!-- Error message container -->
+    <div id="validation-error" class="error-message" style="display: none; margin-top: 1rem; padding: 1rem; background: #ffebee; border: 1px solid #ef5350; border-radius: 4px;"></div>
+</div>
+
+<script>
+// Wizard state
+let currentStep = 1;
+
+// Initialize wizard on page load
+document.addEventListener('DOMContentLoaded', async () => {
+    // Load saved data
+    await loadSavedData();
+
+    // Check URL hash for initial step
+    const hash = window.location.hash.replace('#step-', '');
+    if (hash && !isNaN(hash)) {
+        const step = parseInt(hash);
+        if (step >= 1 && step <= 5) {
+            currentStep = step;
+        }
+    }
+
+    showStep(currentStep);
+
+    // Set up navigation button handlers
+    document.getElementById('btn-back').addEventListener('click', prevStep);
+    document.getElementById('btn-next').addEventListener('click', nextStep);
+    document.getElementById('btn-submit').addEventListener('click', submitWizard);
+});
+
+// Show specific step
+function showStep(step) {
+    // Hide all steps
+    document.querySelectorAll('.wizard-step').forEach(el => {
+        el.classList.remove('active');
+    });
+
+    // Show current step
+    const stepElement = document.querySelector(`.wizard-step[data-step="${step}"]`);
+    if (stepElement) {
+        stepElement.classList.add('active');
+    }
+
+    // Update progress indicator
+    document.querySelectorAll('.wizard-progress-step').forEach(el => {
+        const stepNum = parseInt(el.dataset.step);
+        el.classList.remove('active', 'completed');
+
+        if (stepNum === step) {
+            el.classList.add('active');
+        } else if (stepNum < step) {
+            el.classList.add('completed');
+        }
+    });
+
+    // Update navigation buttons
+    const btnBack = document.getElementById('btn-back');
+    const btnNext = document.getElementById('btn-next');
+    const btnSubmit = document.getElementById('btn-submit');
+
+    if (step === 1) {
+        btnBack.style.display = 'none';
+    } else {
+        btnBack.style.display = 'inline-block';
+    }
+
+    if (step === 5) {
+        btnNext.style.display = 'none';
+        btnSubmit.style.display = 'inline-block';
+    } else {
+        btnNext.style.display = 'inline-block';
+        btnSubmit.style.display = 'none';
+    }
+
+    // Update URL hash
+    window.location.hash = `step-${step}`;
+
+    // Hide validation error
+    document.getElementById('validation-error').style.display = 'none';
+}
+
+// Validate current step
+function validateStep(step) {
+    const stepElement = document.querySelector(`.wizard-step[data-step="${step}"]`);
+    if (!stepElement) return false;
+
+    // Clear previous error states
+    stepElement.querySelectorAll('.error').forEach(el => {
+        el.classList.remove('error');
+    });
+    stepElement.querySelectorAll('.error-message').forEach(el => {
+        el.textContent = '';
+    });
+
+    const inputs = stepElement.querySelectorAll('input[required], select[required]');
+    let isValid = true;
+
+    inputs.forEach(input => {
+        const value = input.value.trim();
+        let error = null;
+
+        // Check if required field is empty
+        if (!value) {
+            error = 'This field is required';
+            isValid = false;
+        } else {
+            // Type-specific validation
+            if (input.type === 'number') {
+                const num = parseFloat(value);
+                const min = input.min ? parseFloat(input.min) : null;
+                const max = input.max ? parseFloat(input.max) : null;
+
+                if (isNaN(num)) {
+                    error = 'Must be a valid number';
+                    isValid = false;
+                } else if (min !== null && num < min) {
+                    error = `Must be at least ${min}`;
+                    isValid = false;
+                } else if (max !== null && num > max) {
+                    error = `Must be at most ${max}`;
+                    isValid = false;
+                }
+            } else if (input.type === 'date') {
+                const date = new Date(value);
+                if (isNaN(date.getTime())) {
+                    error = 'Invalid date';
+                    isValid = false;
+                }
+            }
+        }
+
+        if (error) {
+            input.classList.add('error');
+            const errorSpan = input.parentElement.querySelector('.error-message');
+            if (errorSpan) {
+                errorSpan.textContent = error;
+            }
+        }
+    });
+
+    return isValid;
+}
+
+// Move to next step
+function nextStep() {
+    if (validateStep(currentStep)) {
+        if (currentStep < 5) {
+            currentStep++;
+            showStep(currentStep);
+        }
+    }
+}
+
+// Move to previous step
+function prevStep() {
+    if (currentStep > 1) {
+        currentStep--;
+        showStep(currentStep);
+    }
+}
+
+// Auto-save field on blur
+async function autoSave(fieldName, value) {
+    try {
+        const response = await fetch('/api/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ [fieldName]: value }),
+        });
+
+        if (response.ok) {
+            showSaveIndicator();
+        }
+    } catch (error) {
+        console.error('Auto-save error:', error);
+    }
+}
+
+// Show brief save indicator
+function showSaveIndicator() {
+    const indicator = document.getElementById('save-indicator');
+    indicator.classList.add('show');
+    setTimeout(() => {
+        indicator.classList.remove('show');
+    }, 2000);
+}
+
+// Load saved data from API
+async function loadSavedData() {
+    try {
+        const response = await fetch('/api/load');
+        if (response.ok) {
+            const data = await response.json();
+
+            // Populate all form fields
+            for (const [key, value] of Object.entries(data)) {
+                if (value !== null && value !== undefined) {
+                    const input = document.querySelector(`[name="${key}"]`);
+                    if (input) {
+                        input.value = value;
+                    }
+                }
+            }
+
+            // Load scenario data
+            loadScenarioData('renewal_scenario_1', data.renewal_scenario_1);
+            loadScenarioData('renewal_scenario_2', data.renewal_scenario_2);
+            loadScenarioData('renewal_scenario_3', data.renewal_scenario_3);
+        }
+    } catch (error) {
+        console.error('Error loading saved data:', error);
+    }
+}
+
+// Submit wizard
+async function submitWizard() {
+    // Validate step 5
+    if (!validateStep(5)) {
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/simulate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (response.ok) {
+            // Redirect to results page
+            window.location.href = '/results';
+        } else {
+            const error = await response.json();
+            const errorDiv = document.getElementById('validation-error');
+            errorDiv.textContent = error.detail.error || 'Simulation failed';
+            errorDiv.style.display = 'block';
+        }
+    } catch (error) {
+        console.error('Simulation error:', error);
+        const errorDiv = document.getElementById('validation-error');
+        errorDiv.textContent = 'Failed to run simulation. Please try again.';
+        errorDiv.style.display = 'block';
+    }
+}
+
+// Placeholder for scenario loading (will be implemented in step partials)
+function loadScenarioData(fieldName, jsonData) {
+    if (!jsonData) return;
+
+    try {
+        const data = JSON.parse(jsonData);
+        // This will be handled by scenario-specific JavaScript
+        window.dispatchEvent(new CustomEvent('load-scenario', {
+            detail: { fieldName, data }
+        }));
+    } catch (error) {
+        console.error('Error parsing scenario data:', error);
+    }
+}
+</script>
+{% endblock %}

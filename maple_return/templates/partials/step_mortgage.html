@@ -1,0 +1,39 @@
+<h2>Step 2: Mortgage Details</h2>
+
+<div class="wizard-form">
+    <div class="form-group">
+        <label for="annual_rate">Annual Interest Rate (decimal)</label>
+        <input type="number" id="annual_rate" name="annual_rate"
+               step="0.001" min="0" max="1" placeholder="e.g. 0.045 for 4.5%" required
+               onblur="autoSave(this.name, this.value)">
+        <span class="hint-text">Enter as decimal: 0.045 = 4.5%</span>
+        <span class="error-message"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="monthly_payment">Monthly Payment (CAD)</label>
+        <input type="number" id="monthly_payment" name="monthly_payment"
+               step="0.01" min="0" placeholder="e.g. 2100" required
+               onblur="autoSave(this.name, this.value)">
+        <span class="error-message"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="amortization_years">Amortization (years)</label>
+        <input type="number" id="amortization_years" name="amortization_years"
+               min="1" max="40" placeholder="e.g. 30" required
+               onblur="autoSave(this.name, this.value)">
+        <span class="error-message"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="rate_type">Rate Type</label>
+        <select id="rate_type" name="rate_type" required
+                onchange="autoSave(this.name, this.value)">
+            <option value="">Select rate type...</option>
+            <option value="variable">Variable</option>
+            <option value="fixed">Fixed</option>
+        </select>
+        <span class="error-message"></span>
+    </div>
+</div>

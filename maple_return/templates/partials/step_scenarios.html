@@ -1,0 +1,240 @@
+<h2>Step 4: Renewal Scenarios</h2>
+
+<p class="hint-text" style="margin-bottom: 1.5rem;">
+    Define up to 3 renewal rate scenarios. Each scenario specifies rates for future 5-year terms
+    after the initial term. Leave scenarios 2 and 3 empty to run only the base scenario.
+</p>
+
+<div class="wizard-form">
+    <!-- Scenario 1 (Required) -->
+    <div class="scenario-container">
+        <h3>Scenario 1 (Base Case) <span style="color: #d32f2f;">*</span></h3>
+        <div id="scenario-1-terms" class="scenario-terms">
+            <div class="term-row" data-term="1">
+                <label>Term 1</label>
+                <input type="number" class="term-rate" step="0.001" min="0" max="1"
+                       placeholder="e.g. 0.05" required>
+                <select class="term-type" required>
+                    <option value="">Type...</option>
+                    <option value="variable">Variable</option>
+                    <option value="fixed">Fixed</option>
+                </select>
+            </div>
+        </div>
+        <button type="button" class="btn btn-secondary" onclick="addTerm(1)">Add Term</button>
+        <input type="hidden" id="renewal_scenario_1" name="renewal_scenario_1">
+    </div>
+
+    <!-- Scenario 2 (Optional) -->
+    <div class="scenario-container">
+        <h3>Scenario 2 (Optional)</h3>
+        <div id="scenario-2-terms" class="scenario-terms">
+            <div class="term-row" data-term="1">
+                <label>Term 1</label>
+                <input type="number" class="term-rate" step="0.001" min="0" max="1"
+                       placeholder="e.g. 0.05">
+                <select class="term-type">
+                    <option value="">Type...</option>
+                    <option value="variable">Variable</option>
+                    <option value="fixed">Fixed</option>
+                </select>
+            </div>
+        </div>
+        <button type="button" class="btn btn-secondary" onclick="addTerm(2)">Add Term</button>
+        <input type="hidden" id="renewal_scenario_2" name="renewal_scenario_2">
+    </div>
+
+    <!-- Scenario 3 (Optional) -->
+    <div class="scenario-container">
+        <h3>Scenario 3 (Optional)</h3>
+        <div id="scenario-3-terms" class="scenario-terms">
+            <div class="term-row" data-term="1">
+                <label>Term 1</label>
+                <input type="number" class="term-rate" step="0.001" min="0" max="1"
+                       placeholder="e.g. 0.05">
+                <select class="term-type">
+                    <option value="">Type...</option>
+                    <option value="variable">Variable</option>
+                    <option value="fixed">Fixed</option>
+                </select>
+            </div>
+        </div>
+        <button type="button" class="btn btn-secondary" onclick="addTerm(3)">Add Term</button>
+        <input type="hidden" id="renewal_scenario_3" name="renewal_scenario_3">
+    </div>
+</div>
+
+<style>
+    .scenario-container {
+        margin-bottom: 2rem;
+        padding: 1rem;
+        background: #f5f5f5;
+        border-radius: 4px;
+    }
+
+    .scenario-container h3 {
+        margin-top: 0;
+        margin-bottom: 1rem;
+    }
+
+    .scenario-terms {
+        margin-bottom: 1rem;
+    }
+
+    .term-row {
+        display: grid;
+        grid-template-columns: 100px 1fr 150px auto;
+        gap: 0.5rem;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .term-row label {
+        font-weight: 500;
+    }
+
+    .term-row input,
+    .term-row select {
+        margin: 0;
+    }
+
+    .term-row button {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+    }
+</style>
+
+<script>
+// Track term counts per scenario
+const termCounts = { 1: 1, 2: 1, 3: 1 };
+
+// Add new term to scenario
+function addTerm(scenarioNum) {
+    if (termCounts[scenarioNum] >= 5) {
+        alert('Maximum 5 renewal terms per scenario');
+        return;
+    }
+
+    termCounts[scenarioNum]++;
+    const termNum = termCounts[scenarioNum];
+    const container = document.getElementById(`scenario-${scenarioNum}-terms`);
+
+    const termRow = document.createElement('div');
+    termRow.className = 'term-row';
+    termRow.dataset.term = termNum;
+
+    const required = scenarioNum === 1;
+
+    termRow.innerHTML = `
+        <label>Term ${termNum}</label>
+        <input type="number" class="term-rate" step="0.001" min="0" max="1"
+               placeholder="e.g. 0.05" ${required ? 'required' : ''}>
+        <select class="term-type" ${required ? 'required' : ''}>
+            <option value="">Type...</option>
+            <option value="variable">Variable</option>
+            <option value="fixed">Fixed</option>
+        </select>
+        <button type="button" class="btn btn-secondary" onclick="removeTerm(${scenarioNum}, ${termNum})">Remove</button>
+    `;
+
+    container.appendChild(termRow);
+
+    // Add event listeners for auto-save
+    termRow.querySelector('.term-rate').addEventListener('blur', () => serializeScenario(scenarioNum));
+    termRow.querySelector('.term-type').addEventListener('change', () => serializeScenario(scenarioNum));
+}
+
+// Remove term from scenario
+function removeTerm(scenarioNum, termNum) {
+    const container = document.getElementById(`scenario-${scenarioNum}-terms`);
+    const termRow = container.querySelector(`.term-row[data-term="${termNum}"]`);
+    if (termRow) {
+        termRow.remove();
+        serializeScenario(scenarioNum);
+    }
+}
+
+// Serialize scenario to JSON and auto-save
+function serializeScenario(scenarioNum) {
+    const container = document.getElementById(`scenario-${scenarioNum}-terms`);
+    const termRows = container.querySelectorAll('.term-row');
+    const terms = [];
+
+    termRows.forEach(row => {
+        const rate = row.querySelector('.term-rate').value;
+        const type = row.querySelector('.term-type').value;
+
+        if (rate && type) {
+            terms.push({ rate, type });
+        }
+    });
+
+    const hiddenInput = document.getElementById(`renewal_scenario_${scenarioNum}`);
+    const jsonValue = terms.length > 0 ? JSON.stringify(terms) : '';
+    hiddenInput.value = jsonValue;
+
+    // Auto-save if there's data
+    if (jsonValue) {
+        autoSave(`renewal_scenario_${scenarioNum}`, jsonValue);
+    }
+}
+
+// Initialize event listeners when step loads
+document.addEventListener('DOMContentLoaded', () => {
+    // Add blur/change listeners to initial term rows
+    for (let scenarioNum = 1; scenarioNum <= 3; scenarioNum++) {
+        const container = document.getElementById(`scenario-${scenarioNum}-terms`);
+        const termRow = container.querySelector('.term-row');
+        if (termRow) {
+            termRow.querySelector('.term-rate').addEventListener('blur', () => serializeScenario(scenarioNum));
+            termRow.querySelector('.term-type').addEventListener('change', () => serializeScenario(scenarioNum));
+        }
+    }
+});
+
+// Listen for load-scenario events from main wizard
+window.addEventListener('load-scenario', (event) => {
+    const { fieldName, data } = event.detail;
+    const scenarioNum = parseInt(fieldName.replace('renewal_scenario_', ''));
+
+    if (scenarioNum >= 1 && scenarioNum <= 3 && Array.isArray(data)) {
+        const container = document.getElementById(`scenario-${scenarioNum}-terms`);
+
+        // Clear existing rows
+        container.innerHTML = '';
+        termCounts[scenarioNum] = 0;
+
+        // Add rows for each term in data
+        data.forEach((term, index) => {
+            termCounts[scenarioNum]++;
+            const termNum = termCounts[scenarioNum];
+            const required = scenarioNum === 1;
+
+            const termRow = document.createElement('div');
+            termRow.className = 'term-row';
+            termRow.dataset.term = termNum;
+
+            termRow.innerHTML = `
+                <label>Term ${termNum}</label>
+                <input type="number" class="term-rate" step="0.001" min="0" max="1"
+                       value="${term.rate}" placeholder="e.g. 0.05" ${required ? 'required' : ''}>
+                <select class="term-type" ${required ? 'required' : ''}>
+                    <option value="">Type...</option>
+                    <option value="variable" ${term.type === 'variable' ? 'selected' : ''}>Variable</option>
+                    <option value="fixed" ${term.type === 'fixed' ? 'selected' : ''}>Fixed</option>
+                </select>
+                ${index > 0 ? `<button type="button" class="btn btn-secondary" onclick="removeTerm(${scenarioNum}, ${termNum})">Remove</button>` : ''}
+            `;
+
+            container.appendChild(termRow);
+
+            // Add event listeners
+            termRow.querySelector('.term-rate').addEventListener('blur', () => serializeScenario(scenarioNum));
+            termRow.querySelector('.term-type').addEventListener('change', () => serializeScenario(scenarioNum));
+        });
+
+        // Update hidden input
+        serializeScenario(scenarioNum);
+    }
+});
+</script>

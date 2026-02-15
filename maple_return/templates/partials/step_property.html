@@ -1,0 +1,27 @@
+<h2>Step 1: Property Details</h2>
+
+<div class="wizard-form">
+    <div class="form-group">
+        <label for="purchase_date">Purchase Date</label>
+        <input type="date" id="purchase_date" name="purchase_date"
+               placeholder="YYYY-MM-DD" required
+               onblur="autoSave(this.name, this.value)">
+        <span class="error-message"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="purchase_price">Purchase Price (CAD)</label>
+        <input type="number" id="purchase_price" name="purchase_price"
+               step="0.01" min="0" placeholder="e.g. 500000" required
+               onblur="autoSave(this.name, this.value)">
+        <span class="error-message"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="down_payment">Down Payment (CAD)</label>
+        <input type="number" id="down_payment" name="down_payment"
+               step="0.01" min="0" placeholder="e.g. 100000" required
+               onblur="autoSave(this.name, this.value)">
+        <span class="error-message"></span>
+    </div>
+</div>

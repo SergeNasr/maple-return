@@ -40,16 +40,21 @@ app.include_router(router)
 
 @app.get("/")
 async def index(request: Request):
-    """Home page route - test page to verify web server is working.
+    """Home page route - redirects to wizard.
 
     Returns:
-        TemplateResponse: Rendered index.html template with test content
+        RedirectResponse: Redirects to /wizard
     """
-    return templates.TemplateResponse(
-        request=request,
-        name="index.html",
-        context={
-            "title": "Maple Return - Test Page",
-            "message": "Foundation phase: Web server is running successfully",
-        },
-    )
+    from fastapi.responses import RedirectResponse
+
+    return RedirectResponse(url="/wizard")
+
+
+@app.get("/wizard")
+async def wizard(request: Request):
+    """Property wizard page - multi-step form for property data entry.
+
+    Returns:
+        TemplateResponse: Rendered wizard.html template
+    """
+    return templates.TemplateResponse(request=request, name="wizard.html")
