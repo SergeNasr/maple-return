@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}Results - Maple Return{% endblock %}
+
+{% block head_extra %}
+<style>
+    .results-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #e0e0e0;
+    }
+
+    .results-header h1 {
+        margin: 0;
+    }
+
+    .edit-inputs-btn {
+        background: #1976d2;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .edit-inputs-btn:hover {
+        background: #1565c0;
+        text-decoration: none;
+    }
+
+    .tabs {
+        margin-top: 2rem;
+    }
+
+    .tab-headers {
+        display: flex;
+        gap: 0;
+        border-bottom: 2px solid #e0e0e0;
+        margin-bottom: 1.5rem;
+    }
+
+    .tab-header {
+        padding: 0.75rem 1.5rem;
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-bottom: none;
+        cursor: pointer;
+        font-weight: 500;
+        color: #666;
+        transition: all 0.2s;
+    }
+
+    .tab-header:hover {
+        background: #f5f5f5;
+    }
+
+    .tab-header.active {
+        background: #d32f2f;
+        color: white;
+        border-color: #d32f2f;
+    }
+
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="results-header">
+    <h1>Investment Results</h1>
+    <a href="/wizard" class="edit-inputs-btn">Edit Inputs</a>
+</div>
+
+<!-- Dashboard Section -->
+<section class="dashboard-section">
+    {% include "partials/dashboard.html" %}
+</section>
+
+<!-- Tabs Navigation -->
+<div class="tabs">
+    <div class="tab-headers">
+        <div class="tab-header active" onclick="showTab('pnl')">P&L Table</div>
+        <div class="tab-header" onclick="showTab('amortization')">Amortization</div>
+        <div class="tab-header" onclick="showTab('scenarios')">Scenarios</div>
+        <div class="tab-header" onclick="showTab('exit')">Exit Analysis</div>
+    </div>
+
+    <!-- Tab Contents -->
+    <div id="tab-pnl" class="tab-content active">
+        {% include "partials/pnl_table.html" %}
+    </div>
+
+    <div id="tab-amortization" class="tab-content">
+        {% include "partials/amortization_table.html" %}
+    </div>
+
+    <div id="tab-scenarios" class="tab-content">
+        {% include "partials/scenario_comparison.html" %}
+    </div>
+
+    <div id="tab-exit" class="tab-content">
+        {% include "partials/exit_summary.html" %}
+    </div>
+</div>
+
+<script>
+    function showTab(tabName) {
+        // Hide all tab contents
+        const contents = document.querySelectorAll('.tab-content');
+        contents.forEach(content => content.classList.remove('active'));
+
+        // Remove active from all headers
+        const headers = document.querySelectorAll('.tab-header');
+        headers.forEach(header => header.classList.remove('active'));
+
+        // Show selected tab
+        const selectedContent = document.getElementById('tab-' + tabName);
+        if (selectedContent) {
+            selectedContent.classList.add('active');
+        }
+
+        // Activate selected header
+        const activeHeader = event.target;
+        if (activeHeader) {
+            activeHeader.classList.add('active');
+        }
+    }
+</script>
+{% endblock %}

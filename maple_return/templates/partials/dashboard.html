@@ -1,0 +1,117 @@
+<div class="dashboard">
+    <h2>Dashboard</h2>
+
+    <!-- Metric Cards Grid -->
+    <div class="metric-cards">
+        <!-- Row 1 -->
+        <div class="metric-card">
+            <div class="label">Equity Position</div>
+            <div class="value {% if dashboard.equity_position < 0 %}negative{% endif %}">
+                ${{ "{:,.2f}".format(dashboard.equity_position) }}
+            </div>
+            <div class="sub">USD ${{ "{:,.2f}".format(dashboard.equity_position_usd) }}</div>
+        </div>
+
+        <div class="metric-card">
+            <div class="label">Cumulative Cash Flow</div>
+            <div class="value {% if dashboard.cumulative_cashflow < 0 %}negative{% endif %}">
+                ${{ "{:,.2f}".format(dashboard.cumulative_cashflow) }}
+            </div>
+            <div class="sub">USD ${{ "{:,.2f}".format(dashboard.cumulative_cashflow_usd) }}</div>
+        </div>
+
+        <div class="metric-card">
+            <div class="label">Hold Period IRR</div>
+            {% if dashboard.annualized_return_irr is not none %}
+            <div class="value {% if dashboard.annualized_return_irr < 0 %}negative{% endif %}">
+                {{ "{:.2f}".format(dashboard.annualized_return_irr * 100) }}%
+            </div>
+            {% else %}
+            <div class="value">N/A</div>
+            {% endif %}
+            <div class="sub">Annualized return</div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="metric-card">
+            <div class="label">Cap Rate</div>
+            <div class="value {% if dashboard.current_cap_rate < 0 %}negative{% endif %}">
+                {{ "{:.2f}".format(dashboard.current_cap_rate * 100) }}%
+            </div>
+            <div class="sub">Current NOI / Property Value</div>
+        </div>
+
+        <div class="metric-card">
+            <div class="label">Cash-on-Cash Return</div>
+            <div class="value {% if dashboard.cash_on_cash_return < 0 %}negative{% endif %}">
+                {{ "{:.2f}".format(dashboard.cash_on_cash_return * 100) }}%
+            </div>
+            <div class="sub">Annual cash flow / Down payment</div>
+        </div>
+
+        {% if total_return %}
+        <div class="metric-card">
+            <div class="label">Simple ROI</div>
+            <div class="value {% if total_return.simple_roi < 0 %}negative{% endif %}">
+                {{ "{:.2f}".format(total_return.simple_roi * 100) }}%
+            </div>
+            <div class="sub">Total profit / Down payment</div>
+        </div>
+        {% else %}
+        <div class="metric-card">
+            <div class="label">Months Held</div>
+            <div class="value">{{ dashboard.months_held }}</div>
+            <div class="sub">Since purchase</div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Mini Chart -->
+    <div class="chart-container">
+        <h3>Annual Net Cash Flow</h3>
+        {% if pnl_table %}
+        {% set max_val = pnl_table | map(attribute='net_cashflow') | map('abs') | max %}
+        {% set min_cashflow = pnl_table | map(attribute='net_cashflow') | min %}
+        {% set max_cashflow = pnl_table | map(attribute='net_cashflow') | max %}
+        {% set range = max_cashflow - min_cashflow %}
+        {% if range == 0 %}{% set range = 1 %}{% endif %}
+
+        <svg width="100%" height="200" class="mini-chart">
+            <!-- Y-axis baseline -->
+            <line x1="50" y1="150" x2="950" y2="150" stroke="#e0e0e0" stroke-width="2"/>
+
+            <!-- Bars -->
+            {% for row in pnl_table %}
+            {% set bar_width = 800 / pnl_table | length %}
+            {% set x = 50 + (loop.index0 * bar_width) + (bar_width * 0.1) %}
+            {% set bar_actual_width = bar_width * 0.8 %}
+            {% set cashflow = row.net_cashflow %}
+            {% set height = ((cashflow / range) * 120) | abs %}
+            {% if cashflow >= 0 %}
+                {% set y = 150 - height %}
+                {% set color = "#4caf50" %}
+            {% else %}
+                {% set y = 150 %}
+                {% set color = "#d32f2f" %}
+            {% endif %}
+
+            <rect x="{{ x }}" y="{{ y }}" width="{{ bar_actual_width }}" height="{{ height }}"
+                  fill="{{ color }}" opacity="0.8"/>
+
+            <!-- Year label -->
+            <text x="{{ x + bar_actual_width/2 }}" y="175" text-anchor="middle"
+                  font-size="12" fill="#666">{{ row.year }}</text>
+            {% endfor %}
+
+            <!-- Y-axis labels -->
+            <text x="5" y="30" font-size="12" fill="#666">${{ "{:,.0f}".format(max_cashflow) }}</text>
+            <text x="5" y="155" font-size="12" fill="#666">$0</text>
+            {% if min_cashflow < 0 %}
+            <text x="5" y="195" font-size="12" fill="#666">${{ "{:,.0f}".format(min_cashflow) }}</text>
+            {% endif %}
+        </svg>
+        {% else %}
+        <p>No data available</p>
+        {% endif %}
+    </div>
+</div>

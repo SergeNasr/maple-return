@@ -1,0 +1,110 @@
+<div class="exit-summary-container">
+    <h2>Exit Analysis</h2>
+
+    {% if total_return %}
+    <!-- Waterfall Breakdown -->
+    <div class="exit-waterfall">
+        <h3>Waterfall Breakdown</h3>
+        <table class="data-table waterfall-table">
+            <tbody>
+                <tr>
+                    <td><strong>Sale Price</strong></td>
+                    <td class="currency">${{ "{:,.2f}".format(total_return.exit_result.sale_price) }}</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;− Commission</td>
+                    <td class="currency negative">(${{ "{:,.2f}".format(total_return.exit_result.commission) }})</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;− Closing Costs</td>
+                    <td class="currency negative">(${{ "{:,.2f}".format(total_return.exit_result.closing_costs) }})</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;− Mortgage Payoff</td>
+                    <td class="currency negative">(${{ "{:,.2f}".format(total_return.exit_result.mortgage_payoff) }})</td>
+                </tr>
+                <tr class="waterfall-total">
+                    <td><strong>= Net Proceeds</strong></td>
+                    <td class="currency {% if total_return.exit_result.net_proceeds < 0 %}negative{% endif %}">
+                        <strong>${{ "{:,.2f}".format(total_return.exit_result.net_proceeds) }}</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;Net Proceeds (USD)</td>
+                    <td class="currency">${{ "{:,.2f}".format(total_return.exit_result.net_proceeds_usd) }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Implied Appreciation Rate</strong></td>
+                    <td class="percentage">{{ "{:.2f}".format(total_return.exit_result.implied_appreciation_rate * 100) }}% per year</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Total Return Metrics -->
+    <div class="total-return-metrics" style="margin-top: 2rem;">
+        <h3>Total Return Metrics</h3>
+        <table class="data-table">
+            <tbody>
+                <tr>
+                    <td><strong>Hold Period</strong></td>
+                    <td>{{ total_return.hold_period_years }} years ({{ total_return.total_months }} months)</td>
+                </tr>
+                <tr>
+                    <td><strong>Cumulative Net Cash Flow</strong></td>
+                    <td class="currency {% if total_return.cumulative_net_cashflow < 0 %}negative{% endif %}">
+                        ${{ "{:,.2f}".format(total_return.cumulative_net_cashflow) }}
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Total Profit (CAD)</strong></td>
+                    <td class="currency {% if total_return.total_profit < 0 %}negative{% endif %}">
+                        ${{ "{:,.2f}".format(total_return.total_profit) }}
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Total Profit (USD)</strong></td>
+                    <td class="currency {% if total_return.total_profit_usd < 0 %}negative{% endif %}">
+                        ${{ "{:,.2f}".format(total_return.total_profit_usd) }}
+                    </td>
+                </tr>
+                <tr class="highlight-row">
+                    <td><strong>Simple ROI</strong></td>
+                    <td class="percentage {% if total_return.simple_roi < 0 %}negative{% endif %}">
+                        <strong>{{ "{:.2f}".format(total_return.simple_roi * 100) }}%</strong>
+                    </td>
+                </tr>
+                <tr class="highlight-row">
+                    <td><strong>Hold-Period IRR</strong></td>
+                    {% if total_return.hold_period_irr is not none %}
+                    <td class="percentage {% if total_return.hold_period_irr < 0 %}negative{% endif %}">
+                        <strong>{{ "{:.2f}".format(total_return.hold_period_irr * 100) }}%</strong>
+                    </td>
+                    {% else %}
+                    <td>N/A</td>
+                    {% endif %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+    <p>No exit data available. Complete the Exit step in the wizard to see exit analysis.</p>
+    {% endif %}
+</div>
+
+<style>
+    .waterfall-table .waterfall-total {
+        border-top: 2px solid #333;
+        background: #f5f5f5;
+        font-weight: bold;
+    }
+
+    .highlight-row {
+        background: #fffde7;
+    }
+
+    .highlight-row td {
+        font-weight: 600;
+    }
+</style>

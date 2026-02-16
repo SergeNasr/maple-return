@@ -1,0 +1,108 @@
+<div class="scenario-comparison-container">
+    <h2>Scenario Comparison</h2>
+
+    {% if scenario_comparison and scenario_comparison | length > 1 %}
+    <p>Comparing {{ scenario_comparison | length }} renewal rate scenarios side-by-side.</p>
+
+    <table class="data-table scenario-comparison-table">
+        <thead>
+            <tr>
+                <th>Metric</th>
+                {% for scenario in scenario_comparison %}
+                <th>Scenario {{ scenario.scenario_index + 1 }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Renewal Rates</strong></td>
+                {% for scenario in scenario_comparison %}
+                <td>
+                    {% if scenario.renewal_rates %}
+                        {% for rate in scenario.renewal_rates %}
+                            {{ "{:.2f}".format(rate * 100) }}%{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        Single term
+                    {% endif %}
+                </td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td><strong>Total Interest</strong></td>
+                {% for scenario in scenario_comparison %}
+                <td class="currency">${{ "{:,.2f}".format(scenario.total_interest) }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td><strong>Total Payments</strong></td>
+                {% for scenario in scenario_comparison %}
+                <td class="currency">${{ "{:,.2f}".format(scenario.total_payments) }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td><strong>Final Balance</strong></td>
+                {% for scenario in scenario_comparison %}
+                <td class="currency">${{ "{:,.2f}".format(scenario.final_balance) }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td><strong>Months to Payoff</strong></td>
+                {% for scenario in scenario_comparison %}
+                <td>{{ scenario.months_to_payoff }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td><strong>Total Equity</strong></td>
+                {% for scenario in scenario_comparison %}
+                <td class="currency">${{ "{:,.2f}".format(scenario.total_equity) }}</td>
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+
+    {% elif scenario_comparison and scenario_comparison | length == 1 %}
+    <div class="single-scenario-summary">
+        <p>Single scenario with the following details:</p>
+        <table class="data-table">
+            <tbody>
+                <tr>
+                    <td><strong>Renewal Rates</strong></td>
+                    <td>
+                        {% if scenario_comparison[0].renewal_rates %}
+                            {% for rate in scenario_comparison[0].renewal_rates %}
+                                {{ "{:.2f}".format(rate * 100) }}%{% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            Single term (no renewals)
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Total Interest</strong></td>
+                    <td class="currency">${{ "{:,.2f}".format(scenario_comparison[0].total_interest) }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Total Payments</strong></td>
+                    <td class="currency">${{ "{:,.2f}".format(scenario_comparison[0].total_payments) }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Final Balance</strong></td>
+                    <td class="currency">${{ "{:,.2f}".format(scenario_comparison[0].final_balance) }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Months to Payoff</strong></td>
+                    <td>{{ scenario_comparison[0].months_to_payoff }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Total Equity</strong></td>
+                    <td class="currency">${{ "{:,.2f}".format(scenario_comparison[0].total_equity) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+    <p>No scenario data available.</p>
+    {% endif %}
+</div>

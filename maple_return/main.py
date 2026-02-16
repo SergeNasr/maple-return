@@ -58,3 +58,38 @@ async def wizard(request: Request):
         TemplateResponse: Rendered wizard.html template
     """
     return templates.TemplateResponse(request=request, name="wizard.html")
+
+
+@app.get("/results")
+async def results_page(request: Request):
+    """Results page - display simulation results with dashboard and detail tables.
+
+    Runs the simulation using saved config and renders results page.
+    If no config exists or config is incomplete, redirects to wizard.
+
+    Returns:
+        TemplateResponse: Rendered results.html with simulation data
+        RedirectResponse: Redirects to /wizard if config missing/incomplete
+    """
+    from fastapi.responses import RedirectResponse
+
+    from .database import get_db
+
+    # Get database session
+    async for db in get_db():
+        try:
+            # Import routes module to access simulate logic
+            from .routes import simulate
+
+            # Call simulate endpoint (it returns serialized dict)
+            simulation_data = await simulate(db)
+
+            # Add request to context for template rendering
+            simulation_data["request"] = request
+
+            # Render results template with simulation data
+            return templates.TemplateResponse(name="results.html", context=simulation_data)
+
+        except Exception:
+            # If simulation fails (no config, missing fields, etc.), redirect to wizard
+            return RedirectResponse(url="/wizard")
