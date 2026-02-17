@@ -2,6 +2,7 @@
     <h2>Annual Profit & Loss Statement</h2>
 
     {% if pnl_table %}
+    <div class="data-table-wrapper">
     <table class="data-table">
         <thead>
             <tr>
@@ -44,6 +45,7 @@
             {% endfor %}
         </tbody>
     </table>
+    </div>
     {% else %}
     <p>No P&L data available.</p>
     {% endif %}

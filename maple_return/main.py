@@ -60,6 +60,20 @@ async def wizard(request: Request):
     return templates.TemplateResponse(request=request, name="wizard.html")
 
 
+def _numerify(obj):
+    """Recursively convert string-encoded numbers back to floats for template rendering."""
+    if isinstance(obj, dict):
+        return {k: _numerify(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [_numerify(item) for item in obj]
+    if isinstance(obj, str):
+        try:
+            return float(obj)
+        except ValueError:
+            return obj
+    return obj
+
+
 @app.get("/results")
 async def results_page(request: Request):
     """Results page - display simulation results with dashboard and detail tables.
@@ -81,8 +95,11 @@ async def results_page(request: Request):
             # Import routes module to access simulate logic
             from .routes import simulate
 
-            # Call simulate endpoint (it returns serialized dict)
+            # Call simulate endpoint (it returns serialized dict with string-encoded Decimals)
             simulation_data = await simulate(db)
+
+            # Convert string-encoded numbers to floats for Jinja2 template math/formatting
+            simulation_data = _numerify(simulation_data)
 
             # Add request to context for template rendering
             simulation_data["request"] = request

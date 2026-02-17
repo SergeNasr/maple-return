@@ -337,11 +337,16 @@ a:hover {
    TABLES
    =========================== */
 
+.data-table-wrapper {
+    overflow-x: auto;
+    margin-bottom: 2rem;
+}
+
 .data-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 2rem;
     font-size: 0.875rem;
+    white-space: nowrap;
 }
 
 .data-table thead th {

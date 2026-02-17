@@ -34,44 +34,9 @@
         text-decoration: none;
     }
 
-    .tabs {
+    .detail-tables {
         margin-top: 2rem;
-    }
-
-    .tab-headers {
-        display: flex;
-        gap: 0;
-        border-bottom: 2px solid #e0e0e0;
-        margin-bottom: 1.5rem;
-    }
-
-    .tab-header {
-        padding: 0.75rem 1.5rem;
-        background: white;
-        border: 1px solid #e0e0e0;
-        border-bottom: none;
-        cursor: pointer;
-        font-weight: 500;
-        color: #666;
-        transition: all 0.2s;
-    }
-
-    .tab-header:hover {
-        background: #f5f5f5;
-    }
-
-    .tab-header.active {
-        background: #d32f2f;
-        color: white;
-        border-color: #d32f2f;
-    }
-
-    .tab-content {
-        display: none;
-    }
-
-    .tab-content.active {
-        display: block;
+        overflow-x: auto;
     }
 </style>
 {% endblock %}
@@ -87,16 +52,15 @@
     {% include "partials/dashboard.html" %}
 </section>
 
-<!-- Tabs Navigation -->
-<div class="tabs">
-    <div class="tab-headers">
-        <div class="tab-header active" onclick="showTab('pnl')">P&L Table</div>
-        <div class="tab-header" onclick="showTab('amortization')">Amortization</div>
-        <div class="tab-header" onclick="showTab('scenarios')">Scenarios</div>
-        <div class="tab-header" onclick="showTab('exit')">Exit Analysis</div>
+<!-- Detail Tables -->
+<div class="detail-tables">
+    <div class="tabs">
+        <div class="tab active" data-tab="pnl">P&L Table</div>
+        <div class="tab" data-tab="amortization">Amortization</div>
+        <div class="tab" data-tab="scenarios">Scenarios</div>
+        <div class="tab" data-tab="exit">Exit Analysis</div>
     </div>
 
-    <!-- Tab Contents -->
     <div id="tab-pnl" class="tab-content active">
         {% include "partials/pnl_table.html" %}
     </div>
@@ -115,26 +79,13 @@
 </div>
 
 <script>
-    function showTab(tabName) {
-        // Hide all tab contents
-        const contents = document.querySelectorAll('.tab-content');
-        contents.forEach(content => content.classList.remove('active'));
-
-        // Remove active from all headers
-        const headers = document.querySelectorAll('.tab-header');
-        headers.forEach(header => header.classList.remove('active'));
-
-        // Show selected tab
-        const selectedContent = document.getElementById('tab-' + tabName);
-        if (selectedContent) {
-            selectedContent.classList.add('active');
-        }
-
-        // Activate selected header
-        const activeHeader = event.target;
-        if (activeHeader) {
-            activeHeader.classList.add('active');
-        }
-    }
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+        });
+    });
 </script>
 {% endblock %}
