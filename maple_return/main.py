@@ -3,12 +3,13 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
+from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from .database import Base, engine
+from .database import Base, engine, get_db
 from .db_models import PropertyConfig  # noqa: F401 - imported for Base.metadata
-from .routes import router
+from .routes import router, simulate
 
 
 @asynccontextmanager
@@ -38,28 +39,6 @@ app.mount("/static", StaticFiles(directory="maple_return/static"), name="static"
 app.include_router(router)
 
 
-@app.get("/")
-async def index(request: Request):
-    """Home page route - redirects to wizard.
-
-    Returns:
-        RedirectResponse: Redirects to /wizard
-    """
-    from fastapi.responses import RedirectResponse
-
-    return RedirectResponse(url="/wizard")
-
-
-@app.get("/wizard")
-async def wizard(request: Request):
-    """Property wizard page - multi-step form for property data entry.
-
-    Returns:
-        TemplateResponse: Rendered wizard.html template
-    """
-    return templates.TemplateResponse(request=request, name="wizard.html")
-
-
 def _numerify(obj):
     """Recursively convert string-encoded numbers back to floats for template rendering."""
     if isinstance(obj, dict):
@@ -74,9 +53,9 @@ def _numerify(obj):
     return obj
 
 
-@app.get("/results")
-async def results_page(request: Request):
-    """Results page - display simulation results with dashboard and detail tables.
+@app.get("/")
+async def index(request: Request):
+    """Home page route - shows results if valid data exists, otherwise redirects to wizard.
 
     Runs the simulation using saved config and renders results page.
     If no config exists or config is incomplete, redirects to wizard.
@@ -85,28 +64,24 @@ async def results_page(request: Request):
         TemplateResponse: Rendered results.html with simulation data
         RedirectResponse: Redirects to /wizard if config missing/incomplete
     """
-    from fastapi.responses import RedirectResponse
-
-    from .database import get_db
-
-    # Get database session
     async for db in get_db():
         try:
-            # Import routes module to access simulate logic
-            from .routes import simulate
-
-            # Call simulate endpoint (it returns serialized dict with string-encoded Decimals)
             simulation_data = await simulate(db)
-
-            # Convert string-encoded numbers to floats for Jinja2 template math/formatting
-            simulation_data = _numerify(simulation_data)
-
-            # Add request to context for template rendering
-            simulation_data["request"] = request
-
-            # Render results template with simulation data
-            return templates.TemplateResponse(name="results.html", context=simulation_data)
-
         except Exception:
-            # If simulation fails (no config, missing fields, etc.), redirect to wizard
             return RedirectResponse(url="/wizard")
+
+        simulation_data = _numerify(simulation_data)
+        simulation_data["request"] = request
+        return templates.TemplateResponse(name="results.html", context=simulation_data)
+
+    return RedirectResponse(url="/wizard")
+
+
+@app.get("/wizard")
+async def wizard(request: Request):
+    """Property wizard page - multi-step form for property data entry.
+
+    Returns:
+        TemplateResponse: Rendered wizard.html template
+    """
+    return templates.TemplateResponse(request=request, name="wizard.html")

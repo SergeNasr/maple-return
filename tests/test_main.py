@@ -1,5 +1,7 @@
 """Tests for FastAPI web application routes and endpoints."""
 
+from unittest.mock import AsyncMock, patch
+
 import pytest
 from httpx import ASGITransport, AsyncClient
 
@@ -7,14 +9,36 @@ from maple_return.main import app
 
 
 @pytest.mark.asyncio
-async def test_home_route_redirects_to_wizard():
-    """Test that the home route redirects to wizard."""
-    async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://test", follow_redirects=False
-    ) as client:
-        response = await client.get("/")
-        assert response.status_code == 307
-        assert response.headers["location"] == "/wizard"
+async def test_home_route_redirects_when_no_data(mock_db):
+    """Test that the home route redirects to wizard when simulation fails."""
+    with patch("maple_return.main.simulate", side_effect=Exception("no config")):
+        async with AsyncClient(
+            transport=ASGITransport(app=app),
+            base_url="http://test",
+            follow_redirects=False,
+        ) as client:
+            response = await client.get("/")
+            assert response.status_code == 307
+            assert response.headers["location"] == "/wizard"
+
+
+@pytest.mark.asyncio
+async def test_home_route_shows_results_with_data(mock_db):
+    """Test that the home route renders results when simulation succeeds."""
+    from starlette.responses import HTMLResponse
+
+    fake_data = {"dashboard": {}, "pnl_rows": [], "amort_rows": []}
+    with (
+        patch("maple_return.main.simulate", new_callable=AsyncMock, return_value=fake_data),
+        patch("maple_return.main.templates") as mock_templates,
+    ):
+        mock_templates.TemplateResponse.return_value = HTMLResponse("<html>results</html>")
+        async with AsyncClient(
+            transport=ASGITransport(app=app), base_url="http://test"
+        ) as client:
+            response = await client.get("/")
+            assert response.status_code == 200
+            mock_templates.TemplateResponse.assert_called_once()
 
 
 @pytest.mark.asyncio

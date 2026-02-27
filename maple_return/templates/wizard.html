@@ -328,7 +328,7 @@ async function submitWizard() {
 
         if (response.ok) {
             // Redirect to results page
-            window.location.href = '/results';
+            window.location.href = '/';
         } else {
             const error = await response.json();
             const errorDiv = document.getElementById('validation-error');
