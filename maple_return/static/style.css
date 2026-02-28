@@ -34,6 +34,11 @@ body {
     max-width: 1100px;
     margin: 0 auto;
     padding: 0 2rem;
+    background: transparent;
+    box-shadow: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .header .app-name {
@@ -60,7 +65,7 @@ body {
    =========================== */
 
 h1 {
-    color: #d32f2f;
+    color: #333;
     margin-bottom: 1rem;
     font-size: 2rem;
 }
@@ -266,6 +271,16 @@ a:hover {
     border-color: #1565c0;
 }
 
+.btn-sm {
+    padding: 0.4rem 0.9rem;
+    font-size: 0.85rem;
+}
+
+.detail-tables {
+    margin-top: 2rem;
+    overflow-x: auto;
+}
+
 /* ===========================
    DASHBOARD
    =========================== */
@@ -313,6 +328,57 @@ a:hover {
     color: #999;
 }
 
+/* Tooltip icons */
+.tooltip-icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    text-align: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: white;
+    background: #bbb;
+    border-radius: 50%;
+    cursor: help;
+    position: relative;
+    vertical-align: middle;
+    margin-left: 0.35rem;
+}
+
+.tooltip-icon:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 240px;
+    padding: 0.5rem 0.65rem;
+    background: #333;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.4;
+    text-transform: none;
+    letter-spacing: 0;
+    border-radius: 4px;
+    z-index: 100;
+    pointer-events: none;
+    white-space: normal;
+}
+
+.tooltip-icon:hover::before {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + 2px);
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: #333;
+    z-index: 100;
+    pointer-events: none;
+}
+
 .chart-container {
     background: white;
     border: 1px solid #e0e0e0;
@@ -331,6 +397,14 @@ a:hover {
 .mini-chart {
     display: block;
     max-width: 100%;
+}
+
+.chart-bar {
+    cursor: pointer;
+}
+
+.chart-bar:hover {
+    opacity: 1 !important;
 }
 
 /* ===========================

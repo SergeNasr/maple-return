@@ -5,7 +5,7 @@
     <div class="metric-cards">
         <!-- Row 1 -->
         <div class="metric-card">
-            <div class="label">Equity Position</div>
+            <div class="label">Equity Position <span class="tooltip-icon" data-tooltip="Total equity in the property: down payment + mortgage principal paid to date.">?</span></div>
             <div class="value {% if dashboard.equity_position < 0 %}negative{% endif %}">
                 ${{ "{:,.2f}".format(dashboard.equity_position) }}
             </div>
@@ -13,7 +13,7 @@
         </div>
 
         <div class="metric-card">
-            <div class="label">Cumulative Cash Flow</div>
+            <div class="label">Cumulative Cash Flow <span class="tooltip-icon" data-tooltip="Total net cash received (or paid) across all years, after expenses and mortgage.">?</span></div>
             <div class="value {% if dashboard.cumulative_cashflow < 0 %}negative{% endif %}">
                 ${{ "{:,.2f}".format(dashboard.cumulative_cashflow) }}
             </div>
@@ -21,7 +21,7 @@
         </div>
 
         <div class="metric-card">
-            <div class="label">Hold Period IRR</div>
+            <div class="label">Hold Period IRR <span class="tooltip-icon" data-tooltip="Annualized rate of return accounting for all cash flows. Compare to stock market (~7-10%).">?</span></div>
             {% if dashboard.annualized_return_irr is not none %}
             <div class="value {% if dashboard.annualized_return_irr < 0 %}negative{% endif %}">
                 {{ "{:.2f}".format(dashboard.annualized_return_irr * 100) }}%
@@ -34,7 +34,7 @@
 
         <!-- Row 2 -->
         <div class="metric-card">
-            <div class="label">Cap Rate</div>
+            <div class="label">Cap Rate <span class="tooltip-icon" data-tooltip="Net Operating Income / Property Value. Measures yield independent of financing. Typical: 3-8%.">?</span></div>
             <div class="value {% if dashboard.current_cap_rate < 0 %}negative{% endif %}">
                 {{ "{:.2f}".format(dashboard.current_cap_rate * 100) }}%
             </div>
@@ -42,7 +42,7 @@
         </div>
 
         <div class="metric-card">
-            <div class="label">Cash-on-Cash Return</div>
+            <div class="label">Cash-on-Cash Return <span class="tooltip-icon" data-tooltip="Annual net cash flow / down payment. Measures cash yield on your out-of-pocket investment.">?</span></div>
             <div class="value {% if dashboard.cash_on_cash_return < 0 %}negative{% endif %}">
                 {{ "{:.2f}".format(dashboard.cash_on_cash_return * 100) }}%
             </div>
@@ -51,7 +51,7 @@
 
         {% if total_return %}
         <div class="metric-card">
-            <div class="label">Simple ROI</div>
+            <div class="label">Simple ROI <span class="tooltip-icon" data-tooltip="Total profit / down payment. Cumulative (not annualized) measure of total return.">?</span></div>
             <div class="value {% if total_return.simple_roi < 0 %}negative{% endif %}">
                 {{ "{:.2f}".format(total_return.simple_roi * 100) }}%
             </div>
@@ -59,7 +59,7 @@
         </div>
         {% else %}
         <div class="metric-card">
-            <div class="label">Months Held</div>
+            <div class="label">Months Held <span class="tooltip-icon" data-tooltip="Number of months since the property purchase date.">?</span></div>
             <div class="value">{{ dashboard.months_held }}</div>
             <div class="sub">Since purchase</div>
         </div>
@@ -78,9 +78,9 @@
 
         {% set num_bars = pnl_table | length %}
         {% set label_every = 1 if num_bars <= 10 else (2 if num_bars <= 20 else 5) %}
-        <svg viewBox="0 0 1000 220" preserveAspectRatio="xMidYMid meet" class="mini-chart">
+        <svg viewBox="0 0 1000 320" preserveAspectRatio="xMidYMid meet" class="mini-chart">
             <!-- Y-axis baseline -->
-            <line x1="60" y1="160" x2="960" y2="160" stroke="#e0e0e0" stroke-width="1"/>
+            <line x1="60" y1="240" x2="960" y2="240" stroke="#e0e0e0" stroke-width="1"/>
 
             <!-- Bars -->
             {% for row in pnl_table %}
@@ -88,31 +88,33 @@
             {% set x = 60 + (loop.index0 * bar_width) + (bar_width * 0.1) %}
             {% set bar_actual_width = bar_width * 0.8 %}
             {% set cashflow = row.net_cashflow %}
-            {% set height = ((cashflow / range) * 120) | abs %}
+            {% set height = ((cashflow / range) * 190) | abs %}
             {% if height < 2 %}{% set height = 2 %}{% endif %}
             {% if cashflow >= 0 %}
-                {% set y = 160 - height %}
+                {% set y = 240 - height %}
                 {% set color = "#4caf50" %}
             {% else %}
-                {% set y = 160 %}
+                {% set y = 240 %}
                 {% set color = "#d32f2f" %}
             {% endif %}
 
             <rect x="{{ x }}" y="{{ y }}" width="{{ bar_actual_width }}" height="{{ height }}"
-                  fill="{{ color }}" opacity="0.8" rx="1"/>
+                  fill="{{ color }}" opacity="0.8" rx="1" class="chart-bar">
+                <title>{{ row.year }}: ${{ "{:,.0f}".format(cashflow) }}</title>
+            </rect>
 
-            <!-- Year label (show every Nth) -->
-            {% if loop.index0 % label_every == 0 or loop.last %}
-            <text x="{{ x + bar_actual_width/2 }}" y="180" text-anchor="middle"
-                  font-size="10" fill="#999">{{ row.year }}</text>
+            <!-- Year label (show first, last, and every 5th) -->
+            {% if loop.first or loop.last or row.year % 5 == 0 %}
+            <text x="{{ x + bar_actual_width/2 }}" y="258" text-anchor="middle"
+                  font-size="10" fill="#666">{{ row.year }}</text>
             {% endif %}
             {% endfor %}
 
             <!-- Y-axis labels -->
-            <text x="5" y="35" font-size="10" fill="#999">${{ "{:,.0f}".format(max_cashflow) }}</text>
-            <text x="5" y="165" font-size="10" fill="#999">$0</text>
+            <text x="5" y="40" font-size="10" fill="#999">${{ "{:,.0f}".format(max_cashflow) }}</text>
+            <text x="5" y="245" font-size="10" fill="#999">$0</text>
             {% if min_cashflow < 0 %}
-            <text x="5" y="210" font-size="10" fill="#999">${{ "{:,.0f}".format(min_cashflow) }}</text>
+            <text x="5" y="310" font-size="10" fill="#999">${{ "{:,.0f}".format(min_cashflow) }}</text>
             {% endif %}
         </svg>
         {% else %}

@@ -7,16 +7,11 @@
         <thead>
             <tr>
                 <th>Year</th>
-                <th>Gross Rent</th>
-                <th>Vacancy</th>
                 <th>Net Rent</th>
                 <th>Op. Expenses</th>
                 <th>NOI</th>
                 <th>Mortgage</th>
                 <th>Net Cash Flow</th>
-                <th>Principal</th>
-                <th>Interest</th>
-                <th>Equity Gained</th>
                 <th>Cumulative CF</th>
                 <th>Cumulative Equity</th>
                 <th>Cap Rate</th>
@@ -27,16 +22,11 @@
             {% for row in pnl_table %}
             <tr {% if row.is_partial_year %}class="partial-year"{% endif %}>
                 <td>{{ row.year }}</td>
-                <td class="currency">${{ "{:,.2f}".format(row.gross_rent) }}</td>
-                <td class="currency negative">${{ "{:,.2f}".format(row.vacancy_loss) }}</td>
                 <td class="currency">${{ "{:,.2f}".format(row.net_rent) }}</td>
                 <td class="currency">${{ "{:,.2f}".format(row.operating_expenses) }}</td>
                 <td class="currency {% if row.noi < 0 %}negative{% endif %}">${{ "{:,.2f}".format(row.noi) }}</td>
                 <td class="currency">${{ "{:,.2f}".format(row.mortgage_payment) }}</td>
                 <td class="currency {% if row.net_cashflow < 0 %}negative{% endif %}">${{ "{:,.2f}".format(row.net_cashflow) }}</td>
-                <td class="currency">${{ "{:,.2f}".format(row.principal_paid) }}</td>
-                <td class="currency">${{ "{:,.2f}".format(row.interest_paid) }}</td>
-                <td class="currency {% if row.equity_gained < 0 %}negative{% endif %}">${{ "{:,.2f}".format(row.equity_gained) }}</td>
                 <td class="currency {% if row.cumulative_cashflow < 0 %}negative{% endif %}">${{ "{:,.2f}".format(row.cumulative_cashflow) }}</td>
                 <td class="currency">${{ "{:,.2f}".format(row.cumulative_equity) }}</td>
                 <td class="percentage">{{ "{:.2f}".format(row.cap_rate * 100) }}%</td>
