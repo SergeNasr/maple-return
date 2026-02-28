@@ -310,6 +310,8 @@ a:hover {
     margin-bottom: 0.5rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
 }
 
 .metric-card .value {
