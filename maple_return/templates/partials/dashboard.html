@@ -78,7 +78,7 @@
 
         {% set num_bars = pnl_table | length %}
         {% set label_every = 1 if num_bars <= 10 else (2 if num_bars <= 20 else 5) %}
-        <svg viewBox="0 0 1000 320" preserveAspectRatio="xMidYMid meet" class="mini-chart">
+        <svg viewBox="0 0 1000 340" preserveAspectRatio="xMidYMid meet" class="mini-chart">
             <!-- Y-axis baseline -->
             <line x1="60" y1="240" x2="960" y2="240" stroke="#e0e0e0" stroke-width="1"/>
 
@@ -105,8 +105,9 @@
 
             <!-- Year label (show first, last, and every 5th) -->
             {% if loop.first or loop.last or row.year % 5 == 0 %}
-            <text x="{{ x + bar_actual_width/2 }}" y="258" text-anchor="middle"
-                  font-size="10" fill="#666">{{ row.year }}</text>
+            <text x="{{ x + bar_actual_width/2 }}" y="260" text-anchor="end"
+                  font-size="11" fill="#333" font-weight="600"
+                  transform="rotate(-45, {{ x + bar_actual_width/2 }}, 260)">{{ row.year }}</text>
             {% endif %}
             {% endfor %}
 
