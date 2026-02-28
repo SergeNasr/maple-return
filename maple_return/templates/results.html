@@ -2,7 +2,7 @@
 
 {% block title %}Maple Returns{% endblock %}
 
-{% block header_action %}<a href="/wizard" class="btn btn-sm">Edit Inputs</a>{% endblock %}
+{% block header_action %}<button type="button" class="btn btn-sm" onclick="openDrawer()">Edit Inputs</button>{% endblock %}
 
 {% block content %}
 <h1>Investment Results</h1>
@@ -48,4 +48,6 @@
         });
     });
 </script>
+
+{% include "partials/input_drawer.html" %}
 {% endblock %}

@@ -1,0 +1,186 @@
+<!-- Drawer Backdrop -->
+<div class="drawer-backdrop" onclick="closeDrawer()"></div>
+
+<!-- Input Drawer -->
+<div class="input-drawer">
+    <div class="drawer-header">
+        <h2>Edit Inputs</h2>
+        <button type="button" class="drawer-close" onclick="closeDrawer()">&times;</button>
+    </div>
+
+    <div class="drawer-body">
+        <!-- Property Details -->
+        <div class="accordion-section open">
+            <button type="button" class="accordion-header" onclick="toggleAccordion(this)">
+                <span>Property Details</span>
+                <span class="accordion-chevron"></span>
+            </button>
+            <div class="accordion-content">
+                {% include "partials/step_property.html" %}
+            </div>
+        </div>
+
+        <!-- Mortgage Details -->
+        <div class="accordion-section">
+            <button type="button" class="accordion-header" onclick="toggleAccordion(this)">
+                <span>Mortgage Details</span>
+                <span class="accordion-chevron"></span>
+            </button>
+            <div class="accordion-content">
+                {% include "partials/step_mortgage.html" %}
+            </div>
+        </div>
+
+        <!-- Operating Details -->
+        <div class="accordion-section">
+            <button type="button" class="accordion-header" onclick="toggleAccordion(this)">
+                <span>Operating Details</span>
+                <span class="accordion-chevron"></span>
+            </button>
+            <div class="accordion-content">
+                {% include "partials/step_operating.html" %}
+            </div>
+        </div>
+
+        <!-- Renewal Scenarios -->
+        <div class="accordion-section">
+            <button type="button" class="accordion-header" onclick="toggleAccordion(this)">
+                <span>Renewal Scenarios</span>
+                <span class="accordion-chevron"></span>
+            </button>
+            <div class="accordion-content">
+                {% include "partials/step_scenarios.html" %}
+            </div>
+        </div>
+
+        <!-- Exit Strategy -->
+        <div class="accordion-section">
+            <button type="button" class="accordion-header" onclick="toggleAccordion(this)">
+                <span>Exit Strategy</span>
+                <span class="accordion-chevron"></span>
+            </button>
+            <div class="accordion-content">
+                {% include "partials/step_exit.html" %}
+            </div>
+        </div>
+    </div>
+
+    <div class="drawer-footer">
+        <div id="drawer-error" class="error-message" style="display: none; margin-bottom: 0.75rem; padding: 0.75rem; background: #ffebee; border: 1px solid #ef5350; border-radius: 4px;"></div>
+        <span id="drawer-save-indicator" class="save-indicator">Saved</span>
+        <button type="button" class="btn btn-primary" onclick="runSimulation()" id="btn-run-sim">Run Simulation</button>
+    </div>
+</div>
+
+<script>
+// Drawer open/close
+function openDrawer() {
+    document.querySelector('.drawer-backdrop').classList.add('open');
+    document.querySelector('.input-drawer').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    loadSavedData();
+}
+
+function closeDrawer() {
+    document.querySelector('.drawer-backdrop').classList.remove('open');
+    document.querySelector('.input-drawer').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+// Close on Escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeDrawer();
+});
+
+// Accordion toggle
+function toggleAccordion(header) {
+    const section = header.parentElement;
+    section.classList.toggle('open');
+}
+
+// Auto-save field on blur
+async function autoSave(fieldName, value) {
+    try {
+        const response = await fetch('/api/save', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ [fieldName]: value }),
+        });
+        if (response.ok) {
+            showSaveIndicator();
+        }
+    } catch (error) {
+        console.error('Auto-save error:', error);
+    }
+}
+
+function showSaveIndicator() {
+    const indicator = document.getElementById('drawer-save-indicator');
+    indicator.classList.add('show');
+    setTimeout(() => indicator.classList.remove('show'), 2000);
+}
+
+// Load saved data from API
+async function loadSavedData() {
+    try {
+        const response = await fetch('/api/load');
+        if (response.ok) {
+            const data = await response.json();
+            for (const [key, value] of Object.entries(data)) {
+                if (value !== null && value !== undefined) {
+                    const input = document.querySelector(`.input-drawer [name="${key}"]`);
+                    if (input) input.value = value;
+                }
+            }
+            loadScenarioData('renewal_scenario_1', data.renewal_scenario_1);
+            loadScenarioData('renewal_scenario_2', data.renewal_scenario_2);
+            loadScenarioData('renewal_scenario_3', data.renewal_scenario_3);
+        }
+    } catch (error) {
+        console.error('Error loading saved data:', error);
+    }
+}
+
+function loadScenarioData(fieldName, jsonData) {
+    if (!jsonData) return;
+    try {
+        const data = JSON.parse(jsonData);
+        window.dispatchEvent(new CustomEvent('load-scenario', {
+            detail: { fieldName, data }
+        }));
+    } catch (error) {
+        console.error('Error parsing scenario data:', error);
+    }
+}
+
+// Run simulation
+async function runSimulation() {
+    const btn = document.getElementById('btn-run-sim');
+    const errorDiv = document.getElementById('drawer-error');
+    errorDiv.style.display = 'none';
+    btn.disabled = true;
+    btn.textContent = 'Running...';
+
+    try {
+        const response = await fetch('/api/simulate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+        });
+
+        if (response.ok) {
+            window.location.reload();
+        } else {
+            const error = await response.json();
+            errorDiv.textContent = error.detail?.error || 'Simulation failed';
+            errorDiv.style.display = 'block';
+        }
+    } catch (error) {
+        console.error('Simulation error:', error);
+        errorDiv.textContent = 'Failed to run simulation. Please try again.';
+        errorDiv.style.display = 'block';
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Run Simulation';
+    }
+}
+</script>
