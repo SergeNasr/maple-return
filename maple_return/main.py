@@ -1,6 +1,7 @@
 """FastAPI application for Maple Return property investment analyzer."""
 
 from contextlib import asynccontextmanager
+from datetime import date
 
 from fastapi import FastAPI, Request
 from fastapi.responses import RedirectResponse
@@ -72,6 +73,9 @@ async def index(request: Request):
 
         simulation_data = _numerify(simulation_data)
         simulation_data["request"] = request
+        today = date.today()
+        simulation_data["current_year"] = today.year
+        simulation_data["as_of_label"] = today.strftime("%B %Y")
         return templates.TemplateResponse(name="results.html", context=simulation_data)
 
     return RedirectResponse(url="/wizard")

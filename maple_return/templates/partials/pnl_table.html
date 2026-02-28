@@ -20,8 +20,8 @@
         </thead>
         <tbody>
             {% for row in pnl_table %}
-            <tr {% if row.is_partial_year %}class="partial-year"{% endif %}>
-                <td>{{ row.year }}</td>
+            <tr class="{% if row.year == current_year %}current-year{% endif %}{% if row.is_partial_year %} partial-year{% endif %}">
+                <td>{{ row.year }}{% if row.year == current_year %} <span class="current-year-badge">Now</span>{% endif %}</td>
                 <td class="currency">${{ "{:,.2f}".format(row.net_rent) }}</td>
                 <td class="currency">${{ "{:,.2f}".format(row.operating_expenses) }}</td>
                 <td class="currency {% if row.noi < 0 %}negative{% endif %}">${{ "{:,.2f}".format(row.noi) }}</td>

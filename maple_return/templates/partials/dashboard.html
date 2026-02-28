@@ -1,5 +1,5 @@
 <div class="dashboard">
-    <h2>Dashboard</h2>
+    <h2>Dashboard <span class="dashboard-as-of">as of {{ as_of_label }}</span></h2>
 
     <!-- Metric Cards Grid -->
     <div class="metric-cards">
@@ -90,6 +90,7 @@
             {% set cashflow = row.net_cashflow %}
             {% set height = ((cashflow / range) * 190) | abs %}
             {% if height < 2 %}{% set height = 2 %}{% endif %}
+            {% set is_current = (row.year == current_year) %}
             {% if cashflow >= 0 %}
                 {% set y = 240 - height %}
                 {% set color = "#4caf50" %}
@@ -98,13 +99,22 @@
                 {% set color = "#d32f2f" %}
             {% endif %}
 
+            {% if is_current %}
+            <!-- Current year highlight column -->
+            <rect x="{{ x - bar_actual_width * 0.15 }}" y="10" width="{{ bar_actual_width * 1.3 }}" height="295"
+                  fill="#fff3e0" rx="3"/>
+            <text x="{{ x + bar_actual_width/2 }}" y="160" text-anchor="middle"
+                  font-size="13" fill="#e65100" font-weight="700" opacity="0.5"
+                  writing-mode="tb" letter-spacing="3">{{ row.year }}</text>
+            {% endif %}
+
             <rect x="{{ x }}" y="{{ y }}" width="{{ bar_actual_width }}" height="{{ height }}"
                   fill="{{ color }}" opacity="0.8" rx="1" class="chart-bar">
                 <title>{{ row.year }}: ${{ "{:,.0f}".format(cashflow) }}</title>
             </rect>
 
-            <!-- Year label (show first, last, and every 5th) -->
-            {% if loop.first or loop.last or row.year % 5 == 0 %}
+            <!-- Year label (show first, last, and every 5th — skip current year since it's vertical) -->
+            {% if not is_current and (loop.first or loop.last or row.year % 5 == 0) %}
             <text x="{{ x + bar_actual_width/2 }}" y="260" text-anchor="end"
                   font-size="11" fill="#333" font-weight="600"
                   transform="rotate(-45, {{ x + bar_actual_width/2 }}, 260)">{{ row.year }}</text>
